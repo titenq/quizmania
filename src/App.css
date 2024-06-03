@@ -1,0 +1,18 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.lottie1 {
+  width: 300px;
+}
+
+.lottie2 {
+  width: 100px;
+}
+
+.lottie3 {
+  width: 50px;
+}
