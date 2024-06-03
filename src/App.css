@@ -1,8 +1,16 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.lottieQuiz {
+  width: 100%;
+  animation: toLogo 2s ease forwards 3s;
 }
 
 .lottieQuestion {
@@ -19,4 +27,10 @@
 
 .lottieTwoQuestions {
   width: 300px;
+}
+
+@keyframes toLogo {
+  to {
+    width: 250px;
+  }
 }
