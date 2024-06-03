@@ -1,7 +1,9 @@
 import Lottie from 'lottie-react';
-import lottie1 from './assets/lotties/Animation - 1717429769932.json';
-import lottie2 from './assets/lotties/Animation - 1717430096707.json';
-import lottie3 from './assets/lotties/Animation - 1717430278810.json';
+
+import lottieQuestion from './assets/lotties/question.json';
+import lottieCheck from './assets/lotties/check.json';
+import lottieError from './assets/lotties/error.json';
+import lottieTwoQuestions from './assets/lotties/two-questions.json';
 
 import './App.css';
 
@@ -9,9 +11,10 @@ const App = () => {
   return (
     <>
       <h1>Lottie</h1>
-      <Lottie animationData={lottie1} className='lottie1' />
-      <Lottie animationData={lottie2} loop={false} className='lottie2' />
-      <Lottie animationData={lottie3} loop={false} className='lottie3' />
+      <Lottie animationData={lottieQuestion} className='lottieQuestion' />
+      <Lottie animationData={lottieCheck} loop={false} className='lottieCheck' />
+      <Lottie animationData={lottieError} loop={false} className='lottieError' />
+      <Lottie animationData={lottieTwoQuestions} className='lottieTwoQuestions' />
     </>
   );
 };

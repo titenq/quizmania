@@ -5,14 +5,18 @@
   text-align: center;
 }
 
-.lottie1 {
+.lottieQuestion {
   width: 300px;
 }
 
-.lottie2 {
+.lottieCheck {
   width: 100px;
 }
 
-.lottie3 {
+.lottieError {
   width: 50px;
+}
+
+.lottieTwoQuestions {
+  width: 300px;
 }
