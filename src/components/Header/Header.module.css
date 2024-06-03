@@ -1,0 +1,22 @@
+.container {
+  width: 100%;
+  height: 100%;
+  animation: toHeader 2s ease forwards 3s;
+}
+
+.lottieQuiz {
+  width: 100%;
+  animation: toLogo 2s ease forwards 3s;
+}
+
+@keyframes toHeader {
+  to {
+    height: 150px;
+  }
+}
+
+@keyframes toLogo {
+  to {
+    width: 150px;
+  }
+}
