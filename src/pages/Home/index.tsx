@@ -5,15 +5,15 @@ import lottieCheck from '../../assets/lotties/check.json';
 import lottieError from '../../assets/lotties/error.json';
 import lottieTwoQuestions from '../../assets/lotties/two-questions.json';
 
-import './home.css';
+import styles from './Home.module.css';
 
 const Home = () => {
   return (
     <div className='container'>
-      <Lottie animationData={lottieQuestion} className='lottieQuestion' />
-      <Lottie animationData={lottieCheck} loop={false} className='lottieCheck' />
-      <Lottie animationData={lottieError} loop={false} className='lottieError' />
-      <Lottie animationData={lottieTwoQuestions} className='lottieTwoQuestions' />
+      <Lottie animationData={lottieQuestion} className={styles.lottieQuestion} />
+      <Lottie animationData={lottieCheck} loop={false} className={styles.lottieCheck} />
+      <Lottie animationData={lottieError} loop={false} className={styles.lottieError} />
+      <Lottie animationData={lottieTwoQuestions} className={styles.lottieTwoQuestions} />
     </div>
   );
 };
