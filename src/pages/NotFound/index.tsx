@@ -6,7 +6,7 @@ import styles from './NotFound.module.css';
 
 const NotFound = () => {
   return (
-    <div className='container'>
+    <div className={styles.container}>
       <Lottie animationData={lottieNotFound} className={styles.lottieNotFound} />
     </div>
   );
