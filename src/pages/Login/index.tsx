@@ -2,7 +2,7 @@ import { GoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from 'jwt-decode';
 
 import styles from './Login.module.css';
-import { GoogleCredential } from '../../interfaces/GoogleCredential';
+import { IGoogleCredential } from '../../interfaces/IGoogleCredential';
 
 const Login = () => {
   return (
@@ -14,7 +14,7 @@ const Login = () => {
           let user;
 
           if (credential) {
-            decodedCredential = jwtDecode<GoogleCredential>(credential);
+            decodedCredential = jwtDecode<IGoogleCredential>(credential);
             user = {
               name: decodedCredential.name,
               email: decodedCredential.email,

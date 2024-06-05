@@ -1,4 +1,4 @@
-export interface GoogleCredential {
+export interface IGoogleCredential {
   aud: string,
   azp: string,
   email: string,
