@@ -10,7 +10,7 @@ const Home = () => {
     <div className={styles.container}>
       <div className={styles.subcontainer}>
         <Lottie animationData={lottieQuestion} className={styles.lottieQuestion} />
-        <div className={styles.titleContainer}>
+        <div className={styles.titleContainer} style={{ marginLeft: '-70px', marginTop: '-50px' }}>
           <div style={{ fontSize: '32px' }}>
             Crie o seu <span style={{ fontSize: '48px' }}>Quiz</span>
           </div>
@@ -23,7 +23,7 @@ const Home = () => {
         </div>
       </div>
 
-      <div className={styles.subcontainer}>
+      <div className={styles.subcontainer} style={{ marginTop: '-80px' }}>
         <div className={styles.titleContainer}>
           <div style={{ fontSize: '32px' }}>
             É só incluir a <span style={{ fontSize: '48px' }}>Pergunta</span>
