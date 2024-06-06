@@ -1,8 +1,8 @@
-import { IUserInfo } from './IUserInfo';
+import { IUser } from './IUser';
 
 export interface IAuthContext {
   isLoggedIn: boolean;
-  userInfo: IUserInfo | null;
-  login: (token: string, userInfo: IUserInfo) => void;
+  userInfo: IUser | null;
+  login: (userInfo: IUser) => void;
   logout: () => void;
 }

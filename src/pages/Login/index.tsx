@@ -1,31 +1,30 @@
+import { useNavigate } from 'react-router-dom';
+
 import { GoogleLogin } from '@react-oauth/google';
-import { jwtDecode } from 'jwt-decode';
 
 import styles from './Login.module.css';
-import { IGoogleCredential } from '../../interfaces/IGoogleCredential';
+import getUser from '../../helpers/getUser';
+import { useAuth } from '../../hooks/useAuth';
 
 const Login = () => {
+  const { login, logout } = useAuth();
+  const navigate = useNavigate();
+
   return (
     <div className={styles.container}>
       <GoogleLogin
         onSuccess={credentialResponse => {
           const credential = credentialResponse.credential;
-          let decodedCredential;
-          let user;
+          const userInfo = getUser(credential!);
 
-          if (credential) {
-            decodedCredential = jwtDecode<IGoogleCredential>(credential);
-            user = {
-              name: decodedCredential.name,
-              email: decodedCredential.email,
-              picture: decodedCredential.picture
-            };
+          login(userInfo!);
 
-            console.log(user);
-          }
+          return navigate('/dashboard');
         }}
         onError={() => {
-          console.log('Login Failed');
+          logout();
+
+          return navigate('/');
         }}
       />
     </div>
