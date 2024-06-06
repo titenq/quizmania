@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import Lottie from 'lottie-react';
 
@@ -24,13 +24,15 @@ const Header = () => {
       </div>
 
       {!isLoggedIn ? (
-        <a href='/login' className={styles.link}>Login</a>
+        <Link to='/login' className={styles.link}>Login</Link>
       ) : (
-        <div>
-          <button onClick={handleLogout}>Logout</button>
-          <img src={userInfo?.picture} alt="avatar" />
+        <div className={styles.avatarContainer}>
+            <button onClick={handleLogout} className={styles.buttonLogout}>Logout</button>
+            <Link to='/dashboard'>
+              <img src={userInfo?.picture} alt="avatar" className={styles.avatar} />
+            </Link>
         </div>
-    )}
+      )}
     </div>
   );
 };

@@ -27,6 +27,30 @@
   animation: toLogo 2s ease forwards 3s;
 }
 
+.avatarContainer {
+  display: flex;
+  flex-direction: row;
+  margin: 20px;
+}
+
+.buttonLogout {
+  width: 100px;
+  height: 50px;
+  font-family: Bangers, display;
+  font-size: 32px;
+  color: #f5f5f5;
+  background-color: #212121;
+  border: none;
+  cursor: pointer;
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-left: 30px;
+}
+
 @keyframes toHeader {
   to {
     height: 150px;
