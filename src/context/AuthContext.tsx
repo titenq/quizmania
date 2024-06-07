@@ -18,7 +18,19 @@ export const AuthContext = createContext<IAuthContext>(defaultAuthContext);
 
 export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  const [userInfo, setUserInfo] = useState<IUser | null>(null);
+  // const [userInfo, setUserInfo] = useState<IUser | null>(null);
+  const [userInfo, setUserInfo] = useState<IUser | null>(() => {
+    const credentialCookie = Cookies.get('credential');
+
+    if (credentialCookie) {
+      const parsedCredential = JSON.parse(credentialCookie);
+      const user = getUser(parsedCredential);
+
+      return user;
+    }
+
+    return null;
+  });
 
   useEffect(() => {
     const credentialCookie = Cookies.get('credential');
