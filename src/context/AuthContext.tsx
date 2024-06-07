@@ -5,12 +5,13 @@ import Cookies from 'js-cookie';
 import { IUser } from '../interfaces/IUser';
 import { IAuthContext } from '../interfaces/IAuthContext';
 import { IAuthProviderProps } from '../interfaces/IAuthProviderProps';
+import getUser from '../helpers/getUser';
 
 const defaultAuthContext: IAuthContext = {
   isLoggedIn: false,
   userInfo: null,
   login: () => { },
-  logout: () => { },
+  logout: () => { }
 };
 
 export const AuthContext = createContext<IAuthContext>(defaultAuthContext);
@@ -20,25 +21,28 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
   const [userInfo, setUserInfo] = useState<IUser | null>(null);
 
   useEffect(() => {
-    const userCookie = Cookies.get('user_info');
+    const credentialCookie = Cookies.get('credential');
 
-    if (userCookie) {
-      const parsedUserInfo = JSON.parse(userCookie);
+    if (credentialCookie) {
+      const parsedCredential = JSON.parse(credentialCookie);
+      const user = getUser(parsedCredential);
 
       setIsLoggedIn(true);
-      setUserInfo(parsedUserInfo);
+      setUserInfo(user);
     }
   }, []);
 
-  const login = (userInfo: IUser) => {
-    Cookies.set('user_info', JSON.stringify(userInfo), { expires: 7, secure: true, sameSite: 'strict' });
+  const login = (credential: string) => {
+    Cookies.set('credential', JSON.stringify(credential), { expires: 7, secure: true, sameSite: 'strict' });
+
+    const user = getUser(credential);
 
     setIsLoggedIn(true);
-    setUserInfo(userInfo);
+    setUserInfo(user);
   };
 
   const logout = () => {
-    Cookies.remove('user_info', { expires: 7, secure: true, sameSite: 'strict' });
+    Cookies.remove('credential', { expires: 7, secure: true, sameSite: 'strict' });
 
     setIsLoggedIn(false);
     setUserInfo(null);

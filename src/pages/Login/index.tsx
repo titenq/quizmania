@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { GoogleLogin } from '@react-oauth/google';
 
 import styles from './Login.module.css';
-import getUser from '../../helpers/getUser';
 import { useAuth } from '../../hooks/useAuth';
 
 const Login = () => {
@@ -15,9 +14,7 @@ const Login = () => {
       <GoogleLogin
         onSuccess={credentialResponse => {
           const credential = credentialResponse.credential;
-          const userInfo = getUser(credential!);
-
-          login(userInfo!);
+          credential && login(credential);
 
           return navigate('/dashboard');
         }}
