@@ -4,22 +4,28 @@ import Lottie from 'lottie-react';
 
 import styles from './Header.module.css';
 import lottieQuiz from '../../assets/lotties/quiz.json';
+import avatar from '../../assets/avatar.png';
 import { useAuth } from '../../hooks/useAuth';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const Header = () => {
   const { isLoggedIn, userInfo, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [avatarSrc, setAvatarSrc] = useState(userInfo?.picture);
 
   useEffect(() => {
-    console.log(location.pathname)
-  }, [location])
+    setAvatarSrc(avatar);
+  }, [userInfo])
 
   const handleLogout = () => {
     logout();
 
     return navigate('/');
+  };
+
+  const handleAvatarError = () => {
+
   };
 
   return (
@@ -58,7 +64,12 @@ const Header = () => {
             to='/dashboard'
             className={`${styles.link} ${location.pathname === '/' ? styles.animationToTitle : ''}`}
           >
-            <img src={userInfo?.picture} alt="avatar" className={styles.avatar} />
+            <img
+              src={avatarSrc}
+              alt="avatar"
+              className={styles.avatar}
+              onError={handleAvatarError}
+            />
           </Link>
         </div>
       )}
