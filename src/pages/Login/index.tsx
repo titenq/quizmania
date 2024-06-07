@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-import { GoogleLogin } from '@react-oauth/google';
+import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
 
 import styles from './Login.module.css';
 import { useAuth } from '../../hooks/useAuth';
@@ -9,20 +9,24 @@ const Login = () => {
   const { login, logout } = useAuth();
   const navigate = useNavigate();
 
+  const handleGoogleOnSuccess = (credentialResponse: CredentialResponse) => {
+    const credential = credentialResponse.credential;
+    credential && login(credential);
+
+    return navigate('/dashboard');
+  };
+
+  const handleGoogleOnError = () => {
+    logout();
+
+    return navigate('/');
+  };
+
   return (
     <div className={styles.container}>
       <GoogleLogin
-        onSuccess={credentialResponse => {
-          const credential = credentialResponse.credential;
-          credential && login(credential);
-
-          return navigate('/dashboard');
-        }}
-        onError={() => {
-          logout();
-
-          return navigate('/');
-        }}
+        onSuccess={handleGoogleOnSuccess}
+        onError={handleGoogleOnError}
       />
     </div>
   );

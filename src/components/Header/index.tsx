@@ -12,11 +12,11 @@ const Header = () => {
   const { isLoggedIn, userInfo, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [avatarSrc, setAvatarSrc] = useState(userInfo?.picture);
+  const [avatarSrc, setAvatarSrc] = useState('');
 
   useEffect(() => {
-    setAvatarSrc(avatar);
-  }, [userInfo])
+    userInfo && setAvatarSrc(userInfo?.picture);
+  }, [userInfo]);
 
   const handleLogout = () => {
     logout();
@@ -25,7 +25,7 @@ const Header = () => {
   };
 
   const handleAvatarError = () => {
-
+    setAvatarSrc(avatar);
   };
 
   return (
