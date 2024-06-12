@@ -4,6 +4,7 @@ import Layout from './components/Layout';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
+import GithubLogin from './pages/GithubLogin';
 import ProtectedRoute from './protectedRoutes/ProtectedRoute';
 import NotFound from './pages/NotFound';
 
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
       {
         path: '/login',
         element: <Login />
+      },
+      {
+        path: '/auth/github/callback',
+        element: <GithubLogin />
       },
       {
         path: '/dashboard',

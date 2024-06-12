@@ -5,4 +5,5 @@ export interface IAuthContext {
   userInfo: IUser | null;
   login: (credential: string) => void;
   logout: () => void;
+  loginGithub: (userInfo: IUser) => void;
 }

@@ -9,6 +9,7 @@ const Dashboard = () => {
       <h1>Dashboard</h1>
       <p>{userInfo?.name}</p>
       <p>{userInfo?.email}</p>
+      <p>{userInfo?.picture}</p>
     </div>
   );
 };

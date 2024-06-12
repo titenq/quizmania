@@ -29,9 +29,7 @@ const Header = () => {
   };
 
   return (
-    <div
-      className={`${styles.container} ${location.pathname === '/' ? styles.animationToHeader : ''}`}
-    >
+    <div className={`${styles.container} ${location.pathname === '/' ? styles.animationToHeader : ''}`}>
       <div className={styles.logoContainer}>
         <Lottie
           animationData={lottieQuiz}
@@ -69,6 +67,7 @@ const Header = () => {
               alt="avatar"
               className={styles.avatar}
               onError={handleAvatarError}
+              referrerPolicy="no-referrer"
             />
           </Link>
         </div>

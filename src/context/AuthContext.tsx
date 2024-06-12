@@ -1,7 +1,5 @@
 import { createContext, useState, useEffect, FC } from 'react';
 
-import Cookies from 'js-cookie';
-
 import { IUser } from '../interfaces/IUser';
 import { IAuthContext } from '../interfaces/IAuthContext';
 import { IAuthProviderProps } from '../interfaces/IAuthProviderProps';
@@ -10,20 +8,20 @@ import getUser from '../helpers/getUser';
 const defaultAuthContext: IAuthContext = {
   isLoggedIn: false,
   userInfo: null,
-  login: () => { },
-  logout: () => { }
+  login: () => {},
+  logout: () => {},
+  loginGithub: () => {}
 };
 
 export const AuthContext = createContext<IAuthContext>(defaultAuthContext);
 
 export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  // const [userInfo, setUserInfo] = useState<IUser | null>(null);
   const [userInfo, setUserInfo] = useState<IUser | null>(() => {
-    const credentialCookie = Cookies.get('credential');
+    const credentialStorage = localStorage.getItem('credential');
 
-    if (credentialCookie) {
-      const parsedCredential = JSON.parse(credentialCookie);
+    if (credentialStorage) {
+      const parsedCredential = JSON.parse(credentialStorage);
       const user = getUser(parsedCredential);
 
       return user;
@@ -33,10 +31,10 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
   });
 
   useEffect(() => {
-    const credentialCookie = Cookies.get('credential');
+    const credentialStorage = localStorage.getItem('credential');
 
-    if (credentialCookie) {
-      const parsedCredential = JSON.parse(credentialCookie);
+    if (credentialStorage) {
+      const parsedCredential = JSON.parse(credentialStorage);
       const user = getUser(parsedCredential);
 
       setIsLoggedIn(true);
@@ -45,7 +43,7 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
   }, []);
 
   const login = (credential: string) => {
-    Cookies.set('credential', JSON.stringify(credential), { expires: 7, secure: true, sameSite: 'strict' });
+    localStorage.setItem('credential', JSON.stringify(credential));
 
     const user = getUser(credential);
 
@@ -53,15 +51,20 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
     setUserInfo(user);
   };
 
+  const loginGithub = (userInfo: IUser) => {
+    setIsLoggedIn(true);
+    setUserInfo(userInfo);
+  };
+
   const logout = () => {
-    Cookies.remove('credential', { expires: 7, secure: true, sameSite: 'strict' });
+    localStorage.removeItem('credential');
 
     setIsLoggedIn(false);
     setUserInfo(null);
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, userInfo, login, logout }}>
+    <AuthContext.Provider value={{ isLoggedIn, userInfo, login, logout, loginGithub }}>
       {children}
     </AuthContext.Provider>
   );
