@@ -14,7 +14,7 @@
 .logoContainer {
   display: flex;
   flex-direction: row;
-  width: 100%;
+  height: 100%;
 }
 
 .link {
@@ -22,10 +22,10 @@
   text-decoration: none;
   margin: 10px 50px 0 0;
   font-size: 32px;
+  animation: toTitle 2s ease forwards 3s;
 }
 
 .animationToTitle {
-  opacity: 0;
   animation: toTitle 2s ease forwards 3s;
 }
 
@@ -69,8 +69,12 @@
 }
 
 @keyframes toTitle {
-  to {
-    opacity: 1;
+  0% {
+    display: none;
+  }
+
+  100% {
+    display: block;
   }
 }
 

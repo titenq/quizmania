@@ -1,4 +1,5 @@
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useEffect, useLayoutEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 import Lottie from 'lottie-react';
 
@@ -6,13 +7,12 @@ import styles from './Header.module.css';
 import lottieQuiz from '../../assets/lotties/quiz.json';
 import avatar from '../../assets/avatar.png';
 import { useAuth } from '../../hooks/useAuth';
-import { useEffect, useState } from 'react';
 
 const Header = () => {
   const { isLoggedIn, userInfo, logout } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
   const [avatarSrc, setAvatarSrc] = useState('');
+  const [shouldAnimate, setShouldAnimate] = useState<string | boolean>(false);
 
   useEffect(() => {
     userInfo && setAvatarSrc(userInfo?.picture);
@@ -28,17 +28,26 @@ const Header = () => {
     setAvatarSrc(avatar);
   };
 
+  useLayoutEffect(() => {
+    const hasAnimated = localStorage.getItem('hasAnimated');
+
+    if (!hasAnimated) {
+      setShouldAnimate('true');
+      localStorage.setItem('hasAnimated', 'true');
+    }
+  }, []);
+
   return (
-    <div className={`${styles.container} ${location.pathname === '/' ? styles.animationToHeader : ''}`}>
+    <div className={`${styles.container} ${shouldAnimate ? styles.animationToHeader : ''}`}>
       <div className={styles.logoContainer}>
         <Lottie
           animationData={lottieQuiz}
           loop={false}
-          className={`${styles.lottieQuiz} ${location.pathname === '/' ? styles.animationToLogo : ''}`}
+          className={`${styles.lottieQuiz} ${shouldAnimate ? styles.animationToLogo : ''}`}
         />
         <a
           href='/'
-          className={`${styles.link} ${location.pathname === '/' ? styles.animationToTitle : ''}`}>
+          className={`${styles.link} ${shouldAnimate ? styles.animationToTitle : ''}`}>
           QuizMania
         </a>
       </div>
@@ -46,12 +55,12 @@ const Header = () => {
       {!isLoggedIn ? (
         <Link
           to='/login'
-          className={`${styles.link} ${location.pathname === '/' ? styles.animationToTitle : ''}`}
+          className={`${styles.link} ${shouldAnimate ? styles.animationToTitle : ''}`}
         >
           Login
         </Link>
       ) : (
-          <div className={`${styles.avatarContainer} ${location.pathname === '/' ? styles.animationToTitle : ''}`}>
+          <div className={`${styles.avatarContainer} ${shouldAnimate ? styles.animationToTitle : ''}`}>
           <button
             onClick={handleLogout}
             className={styles.buttonLogout}
@@ -60,7 +69,7 @@ const Header = () => {
           </button>
           <Link
             to='/dashboard'
-            className={`${styles.link} ${location.pathname === '/' ? styles.animationToTitle : ''}`}
+            className={`${styles.link} ${shouldAnimate ? styles.animationToTitle : ''}`}
           >
             <img
               src={avatarSrc}
