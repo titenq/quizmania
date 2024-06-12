@@ -26,8 +26,10 @@ const GithubLogin = () => {
         }
 
         const userInfo = await response.json();
+
+        localStorage.setItem('github_token', token);
         
-        loginGithub(userInfo);
+        loginGithub(token, userInfo);
         navigate('/dashboard');
       } catch (error) {
         console.error('Error during GitHub login:', error);
