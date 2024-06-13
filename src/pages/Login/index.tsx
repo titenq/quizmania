@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 
 import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
-import { FaGithub } from 'react-icons/fa';
+import { FaFacebook, FaGithub } from 'react-icons/fa';
 
 import styles from './Login.module.css';
 import { useAuth } from '../../hooks/useAuth';
@@ -33,6 +33,10 @@ const Login = () => {
     window.location.href = githubAuthUrl;
   };
 
+  const handleFacebookLogin = () => {
+    window.location.href = 'http://localhost:4000/auth/facebook';
+  };
+
   return (
     <div className={styles.container}>
       <GoogleLogin
@@ -42,6 +46,10 @@ const Login = () => {
 
       <button onClick={handleGithubLogin} className={styles.githubButton}>
         Login com GitHub <FaGithub size={22} className={styles.githubIcon} />
+      </button>
+
+      <button onClick={handleFacebookLogin} className={styles.githubButton}>
+        Login com Facebook <FaFacebook size={22} className={styles.githubIcon} />
       </button>
     </div>
   );

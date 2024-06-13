@@ -6,4 +6,5 @@ export interface IAuthContext {
   login: (credential: string) => void;
   logout: () => void;
   loginGithub: (token: string, userInfo: IUser) => void;
+  loginFacebook: (token: string, userInfo: IUser) => void;
 }

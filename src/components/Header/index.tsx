@@ -38,16 +38,16 @@ const Header = () => {
   }, []);
 
   return (
-    <div className={`${styles.container} ${shouldAnimate ? styles.animationToHeader : ''}`}>
+    <div className={`${styles.container} ${shouldAnimate ? styles.animationToHeader : styles.container}`}>
       <div className={styles.logoContainer}>
         <Lottie
           animationData={lottieQuiz}
           loop={false}
-          className={`${styles.lottieQuiz} ${shouldAnimate ? styles.animationToLogo : ''}`}
+          className={`${styles.lottieQuiz} ${shouldAnimate ? styles.animationToLogo : styles.lottieQuiz}`}
         />
         <a
           href='/'
-          className={`${styles.link} ${shouldAnimate ? styles.animationToTitle : ''}`}>
+          className={`${styles.link} ${shouldAnimate ? styles.animationToTitle : styles.link}`}>
           QuizMania
         </a>
       </div>
@@ -55,12 +55,12 @@ const Header = () => {
       {!isLoggedIn ? (
         <Link
           to='/login'
-          className={`${styles.link} ${shouldAnimate ? styles.animationToTitle : ''}`}
+          className={`${styles.link} ${shouldAnimate ? styles.animationToTitle : styles.link}`}
         >
           Login
         </Link>
       ) : (
-          <div className={`${styles.avatarContainer} ${shouldAnimate ? styles.animationToTitle : ''}`}>
+          <div className={`${styles.avatarContainer} ${shouldAnimate ? styles.animationToTitle : styles.avatarContainer}`}>
           <button
             onClick={handleLogout}
             className={styles.buttonLogout}
@@ -69,10 +69,10 @@ const Header = () => {
           </button>
           <Link
             to='/dashboard'
-            className={`${styles.link} ${shouldAnimate ? styles.animationToTitle : ''}`}
+              className={`${styles.link} ${shouldAnimate ? styles.animationToTitle : styles.link}`}
           >
             <img
-              src={avatarSrc}
+              src={avatarSrc === '' ? avatar : avatarSrc}
               alt="avatar"
               className={styles.avatar}
               onError={handleAvatarError}

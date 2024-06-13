@@ -10,7 +10,8 @@ const defaultAuthContext: IAuthContext = {
   userInfo: null,
   login: () => {},
   logout: () => {},
-  loginGithub: () => {}
+  loginGithub: () => {},
+  loginFacebook: () => {}
 };
 
 export const AuthContext = createContext<IAuthContext>(defaultAuthContext);
@@ -22,6 +23,7 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
   useEffect(() => {
     const credentialStorage = localStorage.getItem('credential');
     const githubTokenStorage = localStorage.getItem('github_token');
+    const facebookTokenStorage = localStorage.getItem('facebook_token');
 
     if (credentialStorage) {
       const user = getUser(credentialStorage);
@@ -41,6 +43,9 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
           });
 
           if (!response.ok) {
+            setIsLoggedIn(false);
+            setUserInfo(null);
+
             throw new Error('Failed to fetch user info');
           }
 
@@ -53,6 +58,36 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
         getGithubUser();
       } catch (error) {
         console.error('Error during GitHub login:', error);
+
+        setIsLoggedIn(false);
+        setUserInfo(null);
+      }
+    }
+
+    if (facebookTokenStorage) {
+      try {
+        const getFacebookUser = async () => {
+          const response = await fetch(`https://graph.facebook.com/me?fields=id,name,email&access_token=${facebookTokenStorage}`);
+
+          if (!response.ok) {
+            setIsLoggedIn(false);
+            setUserInfo(null);
+
+            throw new Error('Failed to fetch user info');
+          }
+
+          const user = await response.json();
+
+          setIsLoggedIn(true);
+          setUserInfo(user);
+        };
+
+        getFacebookUser();
+      } catch (error) {
+        console.error('Error during GitHub login:', error);
+
+        setIsLoggedIn(false);
+        setUserInfo(null);
       }
     }
   }, []);
@@ -73,6 +108,13 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
     setUserInfo(userInfo);
   };
 
+  const loginFacebook = (token: string, userInfo: IUser) => {
+    localStorage.setItem('facebook_token', token);
+
+    setIsLoggedIn(true);
+    setUserInfo(userInfo);
+  };
+
   const logout = () => {
     localStorage.clear();
 
@@ -81,7 +123,7 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, userInfo, login, logout, loginGithub }}>
+    <AuthContext.Provider value={{ isLoggedIn, userInfo, login, logout, loginGithub, loginFacebook }}>
       {children}
     </AuthContext.Provider>
   );
