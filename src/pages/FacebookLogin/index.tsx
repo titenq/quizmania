@@ -15,7 +15,17 @@ const FacebookLogin = () => {
   useEffect(() => {
     const handleFacebookOnSuccess = async (token: string) => {
       try {
-        const response = await fetch(`https://graph.facebook.com/me?fields=id,name,email&access_token=${token}`);
+        const response = await fetch(`http://localhost:4000/auth/facebook/user`, {
+          method: 'GET',
+          headers: {
+            'facebook_token': token
+          }
+        });
+
+        const data = response.json();
+
+        console.log(data);
+        /* const response = await fetch(`https://graph.facebook.com/me?fields=id,name,email&access_token=${token}`);
 
         if (!response.ok) {
           throw new Error('Failed to fetch user info');
@@ -32,7 +42,7 @@ const FacebookLogin = () => {
         localStorage.setItem('facebook_token', token);
         
         loginFacebook(token, userInfo);
-        navigate('/dashboard');
+        navigate('/dashboard'); */
       } catch (error) {
         console.error('Error during Facebook login:', error);
         navigate('/login?error=fetch_user_failed');
