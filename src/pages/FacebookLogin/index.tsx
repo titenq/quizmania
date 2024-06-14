@@ -3,7 +3,6 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import styles from './FacebookLogin.module.css';
 import { useAuth } from '../../hooks/useAuth';
-import { IUser } from '../../interfaces/IUser';
 
 const FacebookLogin = () => {
   const { loginFacebook } = useAuth();
@@ -22,27 +21,16 @@ const FacebookLogin = () => {
           }
         });
 
-        const data = response.json();
-
-        console.log(data);
-        /* const response = await fetch(`https://graph.facebook.com/me?fields=id,name,email&access_token=${token}`);
-
         if (!response.ok) {
           throw new Error('Failed to fetch user info');
         }
 
         const user = await response.json();
 
-        const userInfo: IUser = {
-          name: user.name,
-          email: user.email,
-          picture: ''
-        };
-
         localStorage.setItem('facebook_token', token);
         
-        loginFacebook(token, userInfo);
-        navigate('/dashboard'); */
+        loginFacebook(token, user);
+        navigate('/dashboard');
       } catch (error) {
         console.error('Error during Facebook login:', error);
         navigate('/login?error=fetch_user_failed');
