@@ -8,11 +8,11 @@ const ProtectedRoute: FC<IProtectedRouteProps> = ({ children }) => {
   const facebookToken = localStorage.getItem('facebook_token');
   const githubToken = localStorage.getItem('github_token');
 
-  if (googleToken || facebookToken || githubToken) {
-    return <>{children}</>;
-  } else {
+  if (!googleToken && facebookToken && githubToken) {
     return <Navigate to='/login' />;
-  }
+  } 
+  
+  return children;
 };
 
 export default ProtectedRoute;
