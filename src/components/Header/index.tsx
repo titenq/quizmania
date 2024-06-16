@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import Lottie from 'lottie-react';
@@ -9,14 +9,22 @@ import avatar from '../../assets/avatar.png';
 import { useAuth } from '../../hooks/useAuth';
 
 const Header = () => {
-  const { isLoggedIn, userInfo, logout } = useAuth();
   const navigate = useNavigate();
-  const [avatarSrc, setAvatarSrc] = useState('');
+  const { isLoggedIn, userInfo, logout } = useAuth();
   const [shouldAnimate, setShouldAnimate] = useState<string | boolean>(false);
+  const [loginAvatar, setLoginAvatar] = useState<string>(avatar);
 
   useEffect(() => {
-    userInfo && setAvatarSrc(userInfo?.picture);
-  }, [userInfo]);
+    const facebookPicture = localStorage.getItem('facebook_picture');
+    
+    if (facebookPicture) {
+      setLoginAvatar(facebookPicture);
+
+      return;
+    }
+
+    userInfo?.picture && setLoginAvatar(userInfo?.picture);
+  }, [userInfo?.picture]);
 
   const handleLogout = () => {
     logout();
@@ -24,11 +32,7 @@ const Header = () => {
     return navigate('/');
   };
 
-  const handleAvatarError = () => {
-    setAvatarSrc(avatar);
-  };
-
-  useLayoutEffect(() => {
+  useEffect(() => {
     const hasAnimated = localStorage.getItem('hasAnimated');
 
     if (!hasAnimated) {
@@ -72,10 +76,9 @@ const Header = () => {
               className={`${styles.link} ${shouldAnimate ? styles.animationToTitle : styles.link}`}
           >
             <img
-              src={avatarSrc === '' ? avatar : avatarSrc}
+              src={loginAvatar}
               alt="avatar"
               className={styles.avatar}
-              onError={handleAvatarError}
               referrerPolicy="no-referrer"
             />
           </Link>

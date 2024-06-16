@@ -25,71 +25,79 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
     const facebookTokenStorage = localStorage.getItem('facebook_token');
     const githubTokenStorage = localStorage.getItem('github_token');
 
-    if (googleTokenStorage) {
-      const user = getUser(googleTokenStorage);
+    const getFacebookUser = async (token: string) => {
+      const response = await fetch(`https://graph.facebook.com/me?fields=id,name,email&access_token=${token}`);
 
-      setIsLoggedIn(true);
-      setUserInfo(user);
-    }
+      if (!response.ok) {
+        setIsLoggedIn(false);
+        setUserInfo(null);
 
-    if (facebookTokenStorage) {
-      try {
-        const getFacebookUser = async () => {
-          const response = await fetch(`https://graph.facebook.com/me?fields=id,name,email&access_token=${facebookTokenStorage}`);
+        throw new Error('Failed to fetch Facebook user info');
+      }
 
-          if (!response.ok) {
-            setIsLoggedIn(false);
-            setUserInfo(null);
+      const user = await response.json();
 
-            throw new Error('Failed to fetch user info');
-          }
+      return user;
+    };
 
-          const user = await response.json();
+    const getGithubUser = async (token: string) => {
+      const response = await fetch(`http://localhost:4000/auth/github/user`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        setIsLoggedIn(false);
+        setUserInfo(null);
+
+        throw new Error('Failed to fetch Github user info');
+      }
+
+      const user = await response.json();
+
+      return user;
+    };
+
+    const initAuth = async () => {
+      if (googleTokenStorage) {
+        const user = getUser(googleTokenStorage);
+
+        setIsLoggedIn(true);
+        setUserInfo(user);
+      }
+
+      if (facebookTokenStorage) {
+        try {
+          const user = await getFacebookUser(facebookTokenStorage);
 
           setIsLoggedIn(true);
           setUserInfo(user);
-        };
+        } catch (error) {
+          console.error('Error during Facebook login:', error);
 
-        getFacebookUser();
-      } catch (error) {
-        console.error('Error during GitHub login:', error);
-
-        setIsLoggedIn(false);
-        setUserInfo(null);
+          setIsLoggedIn(false);
+          setUserInfo(null);
+        }
       }
-    }
 
-    if (githubTokenStorage) {
-      try {
-        const getGithubUser = async () => {
-          const response = await fetch(`http://localhost:4000/auth/github/user`, {
-            method: 'GET',
-            headers: {
-              'Authorization': `Bearer ${githubTokenStorage}`
-            }
-          });
-
-          if (!response.ok) {
-            setIsLoggedIn(false);
-            setUserInfo(null);
-
-            throw new Error('Failed to fetch user info');
-          }
-
-          const user = await response.json();
+      if (githubTokenStorage) {
+        try {
+          const user = await getGithubUser(githubTokenStorage);
 
           setIsLoggedIn(true);
           setUserInfo(user);
-        };
+        } catch (error) {
+          console.error('Error during GitHub login:', error);
 
-        getGithubUser();
-      } catch (error) {
-        console.error('Error during GitHub login:', error);
-
-        setIsLoggedIn(false);
-        setUserInfo(null);
+          setIsLoggedIn(false);
+          setUserInfo(null);
+        }
       }
-    }
+    };
+
+    initAuth();
   }, []);
 
   const loginGoogle = (token: string) => {

@@ -28,6 +28,7 @@ const FacebookLogin = () => {
         const user = await response.json();
 
         localStorage.setItem('facebook_token', token);
+        localStorage.setItem('facebook_picture', user?.picture);
         
         loginFacebook(token, user);
         navigate('/dashboard');
