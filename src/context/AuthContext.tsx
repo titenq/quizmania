@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect, FC } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import { IUser } from '../interfaces/IUser';
 import { IAuthContext } from '../interfaces/IAuthContext';
@@ -17,19 +18,47 @@ const defaultAuthContext: IAuthContext = {
 export const AuthContext = createContext<IAuthContext>(defaultAuthContext);
 
 export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
+  const location = useLocation();
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [userInfo, setUserInfo] = useState<IUser | null>(null);
 
   useEffect(() => {
     const googleTokenStorage = localStorage.getItem('google_token');
-    const githubTokenStorage = localStorage.getItem('github_token');
     const facebookTokenStorage = localStorage.getItem('facebook_token');
+    const githubTokenStorage = localStorage.getItem('github_token');
 
     if (googleTokenStorage) {
       const user = getUser(googleTokenStorage);
 
       setIsLoggedIn(true);
       setUserInfo(user);
+    }
+
+    if (facebookTokenStorage) {
+      try {
+        const getFacebookUser = async () => {
+          const response = await fetch(`https://graph.facebook.com/me?fields=id,name,email&access_token=${facebookTokenStorage}`);
+
+          if (!response.ok) {
+            setIsLoggedIn(false);
+            setUserInfo(null);
+
+            throw new Error('Failed to fetch user info');
+          }
+
+          const user = await response.json();
+
+          setIsLoggedIn(true);
+          setUserInfo(user);
+        };
+
+        getFacebookUser();
+      } catch (error) {
+        console.error('Error during GitHub login:', error);
+
+        setIsLoggedIn(false);
+        setUserInfo(null);
+      }
     }
 
     if (githubTokenStorage) {
@@ -63,33 +92,6 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
         setUserInfo(null);
       }
     }
-
-    if (facebookTokenStorage) {
-      try {
-        const getFacebookUser = async () => {
-          const response = await fetch(`https://graph.facebook.com/me?fields=id,name,email&access_token=${facebookTokenStorage}`);
-
-          if (!response.ok) {
-            setIsLoggedIn(false);
-            setUserInfo(null);
-
-            throw new Error('Failed to fetch user info');
-          }
-
-          const user = await response.json();
-
-          setIsLoggedIn(true);
-          setUserInfo(user);
-        };
-
-        getFacebookUser();
-      } catch (error) {
-        console.error('Error during GitHub login:', error);
-
-        setIsLoggedIn(false);
-        setUserInfo(null);
-      }
-    }
   }, []);
 
   const loginGoogle = (token: string) => {
@@ -101,15 +103,15 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
     setUserInfo(user);
   };
 
-  const loginGithub = (token: string, userInfo: IUser) => {
-    localStorage.setItem('github_token', token);
+  const loginFacebook = (token: string, userInfo: IUser) => {
+    localStorage.setItem('facebook_token', token);
 
     setIsLoggedIn(true);
     setUserInfo(userInfo);
   };
 
-  const loginFacebook = (token: string, userInfo: IUser) => {
-    localStorage.setItem('facebook_token', token);
+  const loginGithub = (token: string, userInfo: IUser) => {
+    localStorage.setItem('github_token', token);
 
     setIsLoggedIn(true);
     setUserInfo(userInfo);
@@ -125,18 +127,28 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
   useEffect(() => {
     const autoLogin = async () => {
       const googleToken = window.localStorage.getItem('google_token');
+      const facebookToken = window.localStorage.getItem('facebook_token');
+      const githubToken = window.localStorage.getItem('github_token');
 
-      if (!googleToken) {
+      if (!googleToken && !facebookToken && !githubToken ) {
         logout();
       }
 
       if (googleToken) {
         loginGoogle(googleToken);
       }
+
+      if (facebookToken && userInfo) {
+        loginFacebook(facebookToken, userInfo);
+      }
+
+      if (githubToken && userInfo) {
+        loginGithub(githubToken, userInfo!);
+      }
     };
 
     autoLogin();
-  }, []);
+  }, [location, userInfo]);
 
   return (
     <AuthContext.Provider
