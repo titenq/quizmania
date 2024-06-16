@@ -122,22 +122,6 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
     setUserInfo(null);
   };
 
-  useEffect(() => {
-    const autoLogin = async () => {
-      const googleToken = window.localStorage.getItem('google_token');
-
-      if (!googleToken) {
-        logout();
-      }
-
-      if (googleToken) {
-        loginGoogle(googleToken);
-      }
-    };
-
-    autoLogin();
-  }, []);
-
   return (
     <AuthContext.Provider
       value={

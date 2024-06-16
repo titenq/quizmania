@@ -9,12 +9,12 @@ import { useAuth } from '../../hooks/useAuth';
 const githubClientId = import.meta.env.VITE_GITHUB_CLIENT_ID;
 
 const Login = () => {
-  const { login, logout } = useAuth();
+  const { loginGoogle, logout } = useAuth();
   const navigate = useNavigate();
 
-  const handleGoogleOnSuccess = (credentialResponse: CredentialResponse) => {
+  const handleGoogleLogin = (credentialResponse: CredentialResponse) => {
     const credential = credentialResponse.credential;
-    credential && login(credential);
+    credential && loginGoogle(credential);
 
     return navigate('/dashboard');
   };
@@ -40,16 +40,22 @@ const Login = () => {
   return (
     <div className={styles.container}>
       <GoogleLogin
-        onSuccess={handleGoogleOnSuccess}
+        onSuccess={handleGoogleLogin}
         onError={handleGoogleOnError}
       />
 
-      <button onClick={handleGithubLogin} className={styles.githubButton}>
-        Login com GitHub <FaGithub size={22} className={styles.githubIcon} />
+      <button
+        onClick={handleFacebookLogin}
+        className={`${styles.loginButton} ${styles.facebookButton}`}
+      >
+        Login com Facebook <FaFacebook size={22} className={styles.loginIcon} />
       </button>
 
-      <button onClick={handleFacebookLogin} className={styles.githubButton}>
-        Login com Facebook <FaFacebook size={22} className={styles.githubIcon} />
+      <button
+        onClick={handleGithubLogin}
+        className={`${styles.loginButton} ${styles.githubButton}`}
+      >
+        Login com GitHub <FaGithub size={22} className={styles.loginIcon} />
       </button>
     </div>
   );

@@ -1,17 +1,18 @@
 import { FC } from 'react';
 import { Navigate } from 'react-router-dom';
 
-import { useAuth } from '../hooks/useAuth';
 import { IProtectedRouteProps } from '../interfaces/IProtectedRouteProps';
 
 const ProtectedRoute: FC<IProtectedRouteProps> = ({ children }) => {
-  const { userInfo } = useAuth();
+  const googleToken = localStorage.getItem('google_token');
+  const githubToken = localStorage.getItem('github_token');
+  const facebookToken = localStorage.getItem('facebook_token');
 
-  if (!userInfo) {
+  if (googleToken || githubToken || facebookToken) {
+    return <>{children}</>;
+  } else {
     return <Navigate to='/login' />;
   }
-
-  return children;
 };
 
 export default ProtectedRoute;
