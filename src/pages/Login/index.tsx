@@ -16,7 +16,7 @@ const Login = () => {
     const credential = credentialResponse.credential;
     credential && loginGoogle(credential);
 
-    return navigate('/dashboard');
+    return navigate('/admin');
   };
 
   const handleGoogleOnError = () => {

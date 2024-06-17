@@ -65,24 +65,27 @@ const Header = () => {
           Login
         </Link>
       ) : (
-        <div className={`${styles.avatarContainer} ${shouldAnimate ? styles.animationToTitle : styles.avatarContainer}`}>
+        <div
+          className={`${styles.avatarContainer} ${shouldAnimate ? styles.animationToTitle : styles.avatarContainer}`}
+        >
+          <Link
+            to='/admin'
+            className={`${styles.adminLink} ${shouldAnimate ? styles.animationToTitle : styles.adminLink}`}
+          >
+            Admin
+          </Link>
           <button
             onClick={handleLogout}
             className={styles.buttonLogout}
           >
             Logout
           </button>
-          <Link
-            to='/dashboard'
-            className={`${styles.link} ${shouldAnimate ? styles.animationToTitle : styles.link}`}
-          >
-            <img
-              src={loginAvatar}
-              alt="avatar"
-              className={styles.avatar}
-              referrerPolicy="no-referrer"
-            />
-          </Link>
+          <img
+            src={loginAvatar}
+            alt="avatar"
+            className={styles.avatar}
+            referrerPolicy="no-referrer"
+          />
         </div>
       )}
     </div>

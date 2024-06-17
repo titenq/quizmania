@@ -26,7 +26,7 @@ const Home = () => {
       <div className={styles.subcontainer} style={{ marginTop: '-80px' }}>
         <div className={styles.titleContainer}>
           <div style={{ fontSize: '32px' }}>
-            É só incluir a <span style={{ fontSize: '48px' }}>Pergunta</span>
+            É só incluir a <span style={{ fontSize: '48px' }}>Pergunta,</span>
           </div>
           <div style={{ fontSize: '24px' }}>
             a resposta <span style={{ fontSize: '28px' }}>correta</span>

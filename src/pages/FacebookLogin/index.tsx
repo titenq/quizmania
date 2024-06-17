@@ -31,7 +31,7 @@ const FacebookLogin = () => {
         localStorage.setItem('facebook_picture', user?.picture);
         
         loginFacebook(token, user);
-        navigate('/dashboard');
+        navigate('/admin');
       } catch (error) {
         console.error('Error during Facebook login:', error);
         navigate('/login?error=fetch_user_failed');

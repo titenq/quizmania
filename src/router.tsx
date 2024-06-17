@@ -3,7 +3,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
+import Admin from './pages/Admin';
 import GithubLogin from './pages/GithubLogin';
 import FacebookLogin from './pages/FacebookLogin';
 import ProtectedRoute from './protectedRoutes/ProtectedRoute';
@@ -30,10 +30,10 @@ const router = createBrowserRouter([
         element: <FacebookLogin />
       },
       {
-        path: '/dashboard',
+        path: '/admin',
         element: (
           <ProtectedRoute>
-            <Dashboard />
+            <Admin />
           </ProtectedRoute>
         )
       },

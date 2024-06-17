@@ -30,7 +30,7 @@ const GithubLogin = () => {
         localStorage.setItem('github_token', token);
         
         loginGithub(token, userInfo);
-        navigate('/dashboard');
+        navigate('/admin');
       } catch (error) {
         console.error('Error during GitHub login:', error);
         navigate('/login?error=fetch_user_failed');
