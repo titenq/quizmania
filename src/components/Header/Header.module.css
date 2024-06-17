@@ -2,11 +2,12 @@
   display: flex;
   justify-content: space-around;
   flex-direction: row;
-  height: 80%;
+  height: 100%;
   width: 100%;
 }
 
 .animationToHeader {
+  overflow: hidden;
   height: 100vh;
   animation: toHeader 2s ease forwards 3s;
 }
@@ -22,10 +23,11 @@
   text-decoration: none;
   margin: 10px 50px 0 0;
   font-size: 32px;
-  animation: toTitle 2s ease forwards 3s;
 }
 
 .animationToTitle {
+  opacity: 0;
+  font-size: 1px;
   animation: toTitle 2s ease forwards 3s;
 }
 
@@ -34,7 +36,7 @@
 }
 
 .animationToLogo {
-  width: 100%;
+  width: 100vw;
   animation: toLogo 2s ease forwards 3s;
 }
 
@@ -65,21 +67,19 @@
 @keyframes toHeader {
   to {
     height: 80px;
+    overflow: initial;
   }
 }
 
 @keyframes toTitle {
-  0% {
-    display: none;
-  }
-
-  100% {
-    display: block;
+  to {
+    opacity: 1;
+    font-size: 32px;
   }
 }
 
 @keyframes toLogo {
   to {
-    width: 150px;
+    width: 200px;
   }
 }
