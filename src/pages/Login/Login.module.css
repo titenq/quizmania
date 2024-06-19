@@ -9,9 +9,11 @@
 }
 
 .loginButton {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
+  width: 250px;
+  height: 40px;
   border: none;
   border-radius: 4px;
   font-size: 16px;
@@ -23,21 +25,24 @@
 }
 
 .loginButton:hover {
-  background-color: #212121;
-  color: #f5f5f5;
-  border: 1px solid #f5f5f5;
+  background-color: var(--bg-primary);
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+}
+
+.googleButton {
+  background-color: var(--google);
+  color: var(--color-primary);
 }
 
 .githubButton {
-  background-color: #f5f5f5;
-  color: #212121;
-  padding: 6px 45px;
+  background-color: var(--github);
+  color: var(--bg-primary);
 }
 
 .facebookButton {
-  background-color: #0866FF;
-  color: #f5f5f5;
-  padding: 6px 35px;
+  background-color: var(--facebook);
+  color: var(--color-primary);
 }
 
 .loginIcon {

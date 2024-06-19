@@ -19,14 +19,14 @@
 }
 
 .link {
-  color: #f5f5f5;
+  color: var(--color-primary);
   text-decoration: none;
   margin: 10px 50px 0 0;
   font-size: 32px;
 }
 
 .adminLink {
-  color: #f5f5f5;
+  color: var(--color-primary);
   text-decoration: none;
   margin: 0 20px 0 0;
   font-size: 32px;
@@ -60,8 +60,8 @@
   height: 50px;
   font-family: Bangers, display;
   font-size: 32px;
-  color: #f5f5f5;
-  background-color: #212121;
+  color: var(--color-primary);
+  background-color: var(--bg-primary);
   border: none;
   cursor: pointer;
 }
