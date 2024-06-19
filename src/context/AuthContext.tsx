@@ -3,7 +3,6 @@ import { createContext, useState, useEffect, FC } from 'react';
 import { IUser } from '../interfaces/IUser';
 import { IAuthContext } from '../interfaces/IAuthContext';
 import { IAuthProviderProps } from '../interfaces/IAuthProviderProps';
-import getUser from '../helpers/getUser';
 
 const defaultAuthContext: IAuthContext = {
   isLoggedIn: false,
@@ -24,6 +23,26 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
     const googleTokenStorage = localStorage.getItem('google_token');
     const facebookTokenStorage = localStorage.getItem('facebook_token');
     const githubTokenStorage = localStorage.getItem('github_token');
+
+    const getGoogleUser = async (token: string) => {
+      const response = await fetch(`http://localhost:4000/google/user`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        setIsLoggedIn(false);
+        setUserInfo(null);
+
+        throw new Error('Failed to fetch Google user info');
+      }
+
+      const user = await response.json();
+
+      return user;
+    };
 
     const getFacebookUser = async (token: string) => {
       const response = await fetch(`https://graph.facebook.com/me?fields=id,name,email&access_token=${token}`);
@@ -62,10 +81,17 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
 
     const initAuth = async () => {
       if (googleTokenStorage) {
-        const user = getUser(googleTokenStorage);
+        try {
+          const user = await getGoogleUser(googleTokenStorage);
 
-        setIsLoggedIn(true);
-        setUserInfo(user);
+          setIsLoggedIn(true);
+          setUserInfo(user);
+        } catch (error) {
+          console.error('Error during Google login:', error);
+
+          setIsLoggedIn(false);
+          setUserInfo(null);
+        }
       }
 
       if (facebookTokenStorage) {
@@ -100,13 +126,11 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
     initAuth();
   }, []);
 
-  const loginGoogle = (token: string) => {
+  const loginGoogle = (token: string, userInfo: IUser) => {
     localStorage.setItem('google_token', token);
 
-    const user = getUser(token);
-
     setIsLoggedIn(true);
-    setUserInfo(user);
+    setUserInfo(userInfo);
   };
 
   const loginFacebook = (token: string, userInfo: IUser) => {
