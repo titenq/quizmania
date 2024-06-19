@@ -36,10 +36,17 @@ const Header = () => {
     userInfo?.picture && setLoginAvatar(userInfo?.picture);
   }, [userInfo?.picture]);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    const redirectUrl = 'http://localhost:5173'
+    const facebookToken = localStorage.getItem('facebook_token');
+
     logout();
 
-    return navigate('/');
+    if (facebookToken) {
+      window.location.href = `https://www.facebook.com/logout.php?next=${redirectUrl}&access_token=${facebookToken}`;
+    }
+
+    navigate('/');
   };
 
   return (

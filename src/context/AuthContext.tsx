@@ -13,6 +13,10 @@ const defaultAuthContext: IAuthContext = {
   logout: () => {}
 };
 
+const googleTokenStorage = localStorage.getItem('google_token');
+const facebookTokenStorage = localStorage.getItem('facebook_token');
+const githubTokenStorage = localStorage.getItem('github_token');
+
 export const AuthContext = createContext<IAuthContext>(defaultAuthContext);
 
 export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
@@ -20,10 +24,6 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
   const [userInfo, setUserInfo] = useState<IUser | null>(null);
 
   useEffect(() => {
-    const googleTokenStorage = localStorage.getItem('google_token');
-    const facebookTokenStorage = localStorage.getItem('facebook_token');
-    const githubTokenStorage = localStorage.getItem('github_token');
-
     const getGoogleUser = async (token: string) => {
       const response = await fetch(`http://localhost:4000/google/user`, {
         method: 'GET',
@@ -147,7 +147,7 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
     setUserInfo(userInfo);
   };
 
-  const logout = () => {
+  const logout = async () => {
     localStorage.clear();
 
     setIsLoggedIn(false);
