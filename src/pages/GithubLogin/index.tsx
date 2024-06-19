@@ -14,7 +14,7 @@ const GithubLogin = () => {
   useEffect(() => {
     const handleGithubOnSuccess = async (token: string) => {
       try {
-        const response = await fetch(`http://localhost:4000/auth/github/user`, {
+        const response = await fetch(`http://localhost:4000/github/user`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`

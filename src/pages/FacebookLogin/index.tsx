@@ -14,7 +14,7 @@ const FacebookLogin = () => {
   useEffect(() => {
     const handleFacebookOnSuccess = async (token: string) => {
       try {
-        const response = await fetch(`http://localhost:4000/auth/facebook/user`, {
+        const response = await fetch(`http://localhost:4000/facebook/user`, {
           method: 'GET',
           headers: {
             'facebook_token': token

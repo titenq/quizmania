@@ -26,7 +26,7 @@ const Login = () => {
   };
 
   const handleGithubLogin = () => {
-    const redirectUri = 'http://localhost:4000/auth/github/callback';
+    const redirectUri = 'http://localhost:4000/github/callback';
 
     const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${githubClientId}&redirect_uri=${redirectUri}&scope=user`;
 
@@ -34,7 +34,7 @@ const Login = () => {
   };
 
   const handleFacebookLogin = () => {
-    window.location.href = 'http://localhost:4000/auth/facebook';
+    window.location.href = 'http://localhost:4000/facebook';
   };
 
   return (

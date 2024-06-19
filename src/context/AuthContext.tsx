@@ -41,7 +41,7 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
     };
 
     const getGithubUser = async (token: string) => {
-      const response = await fetch(`http://localhost:4000/auth/github/user`, {
+      const response = await fetch(`http://localhost:4000/github/user`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`

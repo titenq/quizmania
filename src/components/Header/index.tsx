@@ -85,6 +85,7 @@ const Header = () => {
             alt="avatar"
             className={styles.avatar}
             referrerPolicy="no-referrer"
+            crossOrigin="anonymous"
           />
         </div>
       )}
