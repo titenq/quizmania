@@ -1,6 +1,9 @@
-import { FaFacebook, FaGithub, FaGoogle } from 'react-icons/fa';
+import Lottie from 'lottie-react';
 
 import styles from './Login.module.css';
+import lottieGoogle from '../../assets/lotties/google.json';
+import lottieFacebook from '../../assets/lotties/facebook.json';
+import lottieGithub from '../../assets/lotties/github.json';
 
 const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 const githubClientId = import.meta.env.VITE_GITHUB_CLIENT_ID;
@@ -32,21 +35,21 @@ const Login = () => {
         onClick={handleGoogleLogin}
         className={`${styles.loginButton} ${styles.googleButton}`}
       >
-        Login com Google <FaGoogle size={22} className={styles.loginIcon} />
+        <span className={styles.loginTitle}>Login com Google</span> <Lottie animationData={lottieGoogle} className={styles.lottieGoogle} />
       </button>
 
       <button
         onClick={handleFacebookLogin}
         className={`${styles.loginButton} ${styles.facebookButton}`}
       >
-        Login com Facebook <FaFacebook size={22} className={styles.loginIcon} />
+        <span className={styles.loginTitle}>Login com Facebook</span> <Lottie animationData={lottieFacebook} className={styles.lottieFacebook} />
       </button>
 
       <button
         onClick={handleGithubLogin}
         className={`${styles.loginButton} ${styles.githubButton}`}
       >
-        Login com GitHub <FaGithub size={22} className={styles.loginIcon} />
+        <span className={styles.loginTitle}>Login com GitHub</span> <Lottie animationData={lottieGithub} className={styles.lottieGithub} />
       </button>
     </div>
   );
