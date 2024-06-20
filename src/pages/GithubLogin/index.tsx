@@ -17,7 +17,7 @@ const GithubLogin = () => {
         const response = await fetch(`http://localhost:4000/github/user`, {
           method: 'GET',
           headers: {
-            'Authorization': `Bearer ${token}`
+            github_token: token
           }
         });
 
