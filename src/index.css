@@ -31,6 +31,7 @@
   --google: #E03F31;
   --facebook: #0866FF;
   --github: #E6EDF3;
+  --x: #fff;
 
   background-color: var(--bg-primary);
   color: var(--color-primary);

@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import Admin from './pages/Admin';
 import GoogleLogin from './pages/GoogleLogin';
 import FacebookLogin from './pages/FacebookLogin';
+import XLogin from './pages/XLogin';
 import GithubLogin from './pages/GithubLogin';
 import ProtectedRoute from './protectedRoutes/ProtectedRoute';
 import NotFound from './pages/NotFound';
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
       {
         path: '/auth/facebook/callback',
         element: <FacebookLogin />
+      },
+      {
+        path: '/auth/x/callback',
+        element: <XLogin />
       },
       {
         path: '/auth/github/callback',

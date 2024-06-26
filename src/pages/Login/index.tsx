@@ -3,6 +3,7 @@ import Lottie from 'lottie-react';
 import styles from './Login.module.css';
 import lottieGoogle from '../../assets/lotties/google.json';
 import lottieFacebook from '../../assets/lotties/facebook.json';
+import lottieX from '../../assets/lotties/x.json';
 import lottieGithub from '../../assets/lotties/github.json';
 
 const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
@@ -17,16 +18,20 @@ const Login = () => {
     window.location.href = googleAuthUrl;
   };
 
+  const handleFacebookLogin = () => {
+    window.location.href = 'http://localhost:4000/facebook';
+  };
+
+  const handleXLogin = () => {
+    window.location.href = 'http://localhost:4000/x';
+  };
+
   const handleGithubLogin = () => {
     const redirectUri = 'http://localhost:4000/github/callback';
 
     const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${githubClientId}&redirect_uri=${redirectUri}&scope=user`;
 
     window.location.href = githubAuthUrl;
-  };
-
-  const handleFacebookLogin = () => {
-    window.location.href = 'http://localhost:4000/facebook';
   };
 
   return (
@@ -36,6 +41,13 @@ const Login = () => {
         className={`${styles.loginButton} ${styles.googleButton}`}
       >
         <span className={styles.loginTitle}>Login com Google</span> <Lottie animationData={lottieGoogle} className={styles.lottieGoogle} />
+      </button>
+
+      <button
+        onClick={handleXLogin}
+        className={`${styles.loginButton} ${styles.xButton}`}
+      >
+        <span className={styles.loginTitle}>Login com X</span> <Lottie animationData={lottieX} className={styles.lottieX} />
       </button>
 
       <button

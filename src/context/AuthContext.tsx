@@ -9,6 +9,7 @@ const defaultAuthContext: IAuthContext = {
   userInfo: null,
   loginGoogle: () => {},
   loginGithub: () => {},
+  loginX: () => {},
   loginFacebook: () => {},
   logout: () => {}
 };
@@ -16,6 +17,7 @@ const defaultAuthContext: IAuthContext = {
 const googleTokenStorage = localStorage.getItem('google_token');
 const facebookTokenStorage = localStorage.getItem('facebook_token');
 const githubTokenStorage = localStorage.getItem('github_token');
+const xTokenStorage = localStorage.getItem('x_token');
 
 export const AuthContext = createContext<IAuthContext>(defaultAuthContext);
 
@@ -79,6 +81,26 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
       return user;
     };
 
+    const getXUser = async (token: string) => {
+      const response = await fetch(`http://localhost:4000/x/user`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        setIsLoggedIn(false);
+        setUserInfo(null);
+
+        throw new Error('Failed to fetch X user info');
+      }
+
+      const user = await response.json();
+
+      return user;
+    };
+
     const initAuth = async () => {
       if (googleTokenStorage) {
         try {
@@ -121,6 +143,20 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
           setUserInfo(null);
         }
       }
+
+      if (xTokenStorage) {
+        try {
+          const user = await getXUser(xTokenStorage);
+
+          setIsLoggedIn(true);
+          setUserInfo(user);
+        } catch (error) {
+          console.error('Error during X login:', error);
+
+          setIsLoggedIn(false);
+          setUserInfo(null);
+        }
+      }
     };
 
     initAuth();
@@ -147,6 +183,13 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
     setUserInfo(userInfo);
   };
 
+  const loginX = (token: string, userInfo: IUser) => {
+    localStorage.setItem('x_token', token);
+
+    setIsLoggedIn(true);
+    setUserInfo(userInfo);
+  };
+
   const logout = async () => {
     localStorage.clear();
 
@@ -161,6 +204,7 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
           isLoggedIn,
           userInfo,
           loginGoogle,
+          loginX,
           loginGithub,
           loginFacebook,
           logout,

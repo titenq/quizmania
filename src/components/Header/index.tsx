@@ -37,14 +37,39 @@ const Header = () => {
   }, [userInfo?.picture]);
 
   const handleLogout = async () => {
-    const redirectUrl = 'http://localhost:5173'
     const facebookToken = localStorage.getItem('facebook_token');
 
-    logout();
+    /* if (facebookToken) {
+      const redirectUrl = encodeURIComponent('http://localhost:4000/facebook/logout');
+      
+      window.location.href = `https://www.facebook.com/logout.php?next=${redirectUrl}&access_token=${facebookToken}`;
+    } */
 
     if (facebookToken) {
-      window.location.href = `https://www.facebook.com/logout.php?next=${redirectUrl}&access_token=${facebookToken}`;
+      const facebookLogout = async () => {
+        try {
+          const response = await fetch('http://localhost:4000/facebook/logout', {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+              facebook_token: facebookToken
+            }
+          });
+
+          if (response.ok) {
+            window.location.href = 'http://localhost:5173/';
+          } else {
+            console.error('Failed to logout');
+          }
+        } catch (error) {
+          console.error('Error logging out:', error);
+        }
+      };
+      
+      facebookLogout();
     }
+
+    logout();
 
     navigate('/');
   };
