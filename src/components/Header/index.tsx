@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import Lottie from 'lottie-react';
 
@@ -9,7 +9,6 @@ import avatar from '../../assets/avatar.png';
 import { useAuth } from '../../hooks/useAuth';
 
 const Header = () => {
-  const navigate = useNavigate();
   const location = useLocation();
   const { isLoggedIn, userInfo, logout } = useAuth();
   const [shouldAnimate, setShouldAnimate] = useState<string | null>(null);
@@ -34,45 +33,7 @@ const Header = () => {
     }
 
     userInfo?.picture && setLoginAvatar(userInfo?.picture);
-  }, [userInfo?.picture]);
-
-  const handleLogout = async () => {
-    const facebookToken = localStorage.getItem('facebook_token');
-
-    /* if (facebookToken) {
-      const redirectUrl = encodeURIComponent('http://localhost:4000/facebook/logout');
-      
-      window.location.href = `https://www.facebook.com/logout.php?next=${redirectUrl}&access_token=${facebookToken}`;
-    } */
-
-    if (facebookToken) {
-      const facebookLogout = async () => {
-        try {
-          const response = await fetch('http://localhost:4000/facebook/logout', {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-              facebook_token: facebookToken
-            }
-          });
-
-          if (response.ok) {
-            window.location.href = 'http://localhost:5173/';
-          } else {
-            console.error('Failed to logout');
-          }
-        } catch (error) {
-          console.error('Error logging out:', error);
-        }
-      };
-      
-      facebookLogout();
-    }
-
-    logout();
-
-    navigate('/');
-  };
+  }, [userInfo?.picture, location]);
 
   return (
     <div className={`${styles.container} ${shouldAnimate ? styles.animationToHeader : styles.container}`}>
@@ -107,7 +68,7 @@ const Header = () => {
             Admin
           </Link>
           <button
-            onClick={handleLogout}
+            onClick={() => logout()}
             className={styles.buttonLogout}
           >
             Logout

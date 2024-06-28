@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import styles from './FacebookLogin.module.css';
 import { useAuth } from '../../hooks/useAuth';
+import { backendBaseUrl } from '../../helpers/baseUrl';
 
 const FacebookLogin = () => {
   const { loginFacebook } = useAuth();
@@ -14,15 +15,15 @@ const FacebookLogin = () => {
   useEffect(() => {
     const handleFacebookOnSuccess = async (token: string) => {
       try {
-        const response = await fetch(`http://localhost:4000/facebook/user`, {
-          method: 'GET',
+        const response = await fetch(`${backendBaseUrl}/facebook/user`, {
+          method: 'POST',
           headers: {
             'facebook_token': token
           }
         });
 
         if (!response.ok) {
-          throw new Error('Failed to fetch user info');
+          throw new Error('Erro ao buscar informações do usuário no Facebook');
         }
 
         const user = await response.json();
@@ -33,8 +34,9 @@ const FacebookLogin = () => {
         loginFacebook(token, user);
         navigate('/admin');
       } catch (error) {
-        console.error('Error during Facebook login:', error);
-        navigate('/login?error=fetch_user_failed');
+        console.error('Erro ao fazer login no Facebook:', error);
+
+        navigate('/login?error=facebook');
       }
     };
 

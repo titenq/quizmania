@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import styles from './GithubLogin.module.css';
 import { useAuth } from '../../hooks/useAuth';
+import { backendBaseUrl } from '../../helpers/baseUrl';
 
 const GithubLogin = () => {
   const { loginGithub } = useAuth();
@@ -14,15 +15,15 @@ const GithubLogin = () => {
   useEffect(() => {
     const handleGithubOnSuccess = async (token: string) => {
       try {
-        const response = await fetch(`http://localhost:4000/github/user`, {
-          method: 'GET',
+        const response = await fetch(`${backendBaseUrl}/github/user`, {
+          method: 'POST',
           headers: {
             github_token: token
           }
         });
 
         if (!response.ok) {
-          throw new Error('Failed to fetch user info');
+          throw new Error('Erro ao buscar informações do usuário no GitHub');
         }
 
         const userInfo = await response.json();
@@ -32,8 +33,8 @@ const GithubLogin = () => {
         loginGithub(token, userInfo);
         navigate('/admin');
       } catch (error) {
-        console.error('Error during GitHub login:', error);
-        navigate('/login?error=fetch_user_failed');
+        console.error('Erro ao fazer login no GitHub:', error);
+        navigate('/login?error=github');
       }
     };
 

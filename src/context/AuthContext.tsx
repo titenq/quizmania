@@ -3,6 +3,7 @@ import { createContext, useState, useEffect, FC } from 'react';
 import { IUser } from '../interfaces/IUser';
 import { IAuthContext } from '../interfaces/IAuthContext';
 import { IAuthProviderProps } from '../interfaces/IAuthProviderProps';
+import { backendBaseUrl, frontendBaseUrl } from '../helpers/baseUrl.ts';
 
 const defaultAuthContext: IAuthContext = {
   isLoggedIn: false,
@@ -27,10 +28,10 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
 
   useEffect(() => {
     const getGoogleUser = async (token: string) => {
-      const response = await fetch(`http://localhost:4000/google/user`, {
-        method: 'GET',
+      const response = await fetch(`${backendBaseUrl}/google/user`, {
+        method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`
+          'google_token': token
         }
       });
 
@@ -38,7 +39,7 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
         setIsLoggedIn(false);
         setUserInfo(null);
 
-        throw new Error('Failed to fetch Google user info');
+        throw new Error('Erro ao buscar informações do usuário no Google');
       }
 
       const user = await response.json();
@@ -47,25 +48,10 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
     };
 
     const getFacebookUser = async (token: string) => {
-      const response = await fetch(`https://graph.facebook.com/me?fields=id,name,email&access_token=${token}`);
-
-      if (!response.ok) {
-        setIsLoggedIn(false);
-        setUserInfo(null);
-
-        throw new Error('Failed to fetch Facebook user info');
-      }
-
-      const user = await response.json();
-
-      return user;
-    };
-
-    const getGithubUser = async (token: string) => {
-      const response = await fetch(`http://localhost:4000/github/user`, {
-        method: 'GET',
+      const response = await fetch(`https://graph.facebook.com/me?fields=id,name,email&access_token=${token}`, {
+        method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`
+          'facebook_token': token
         }
       });
 
@@ -73,7 +59,36 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
         setIsLoggedIn(false);
         setUserInfo(null);
 
-        throw new Error('Failed to fetch Github user info');
+        throw new Error('Erro ao buscar informações do usuário no Facebook');
+      }
+
+      const user = await response.json();
+
+      const userInfo = {
+        name: user.name,
+        email: user.email,
+        picture: `${backendBaseUrl}/uploads/facebook/${user.id}.jpg`
+      };
+
+      setIsLoggedIn(true);
+      setUserInfo(userInfo);
+
+      return userInfo;
+    };
+
+    const getGithubUser = async (token: string) => {
+      const response = await fetch(`${backendBaseUrl}/github/user`, {
+        method: 'POST',
+        headers: {
+          'github_token': token
+        }
+      });
+
+      if (!response.ok) {
+        setIsLoggedIn(false);
+        setUserInfo(null);
+
+        throw new Error('Erro ao buscar informações do usuário no GitHub');
       }
 
       const user = await response.json();
@@ -82,10 +97,10 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
     };
 
     const getXUser = async (token: string) => {
-      const response = await fetch(`http://localhost:4000/x/user`, {
-        method: 'GET',
+      const response = await fetch(`${backendBaseUrl}/x/user`, {
+        method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`
+          'facebook_token': token
         }
       });
 
@@ -93,7 +108,7 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
         setIsLoggedIn(false);
         setUserInfo(null);
 
-        throw new Error('Failed to fetch X user info');
+        throw new Error('Erro ao buscar informações do usuário no X');
       }
 
       const user = await response.json();
@@ -109,7 +124,7 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
           setIsLoggedIn(true);
           setUserInfo(user);
         } catch (error) {
-          console.error('Error during Google login:', error);
+          console.error('Erro no login do Google:', error);
 
           setIsLoggedIn(false);
           setUserInfo(null);
@@ -123,7 +138,7 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
           setIsLoggedIn(true);
           setUserInfo(user);
         } catch (error) {
-          console.error('Error during Facebook login:', error);
+          console.error('Erro no login do Facebook:', error);
 
           setIsLoggedIn(false);
           setUserInfo(null);
@@ -137,7 +152,7 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
           setIsLoggedIn(true);
           setUserInfo(user);
         } catch (error) {
-          console.error('Error during GitHub login:', error);
+          console.error('Erro no login do GitHub:', error);
 
           setIsLoggedIn(false);
           setUserInfo(null);
@@ -151,7 +166,7 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
           setIsLoggedIn(true);
           setUserInfo(user);
         } catch (error) {
-          console.error('Error during X login:', error);
+          console.error('Erro no login do X:', error);
 
           setIsLoggedIn(false);
           setUserInfo(null);
@@ -190,11 +205,30 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
     setUserInfo(userInfo);
   };
 
-  const logout = async () => {
+  const logout = () => {
     localStorage.clear();
 
     setIsLoggedIn(false);
     setUserInfo(null);
+
+    const getLogout = async () => {
+      try {
+        const response = await fetch(`${backendBaseUrl}/logout`, {
+          method: 'GET',
+          credentials: 'include'
+        });
+
+        if (response.ok) {
+          window.location.href = frontendBaseUrl;
+        } else {
+          console.error('Erro no logout');
+        }
+      } catch (error) {
+        console.error('Erro no logout:', error);
+      }
+    };
+
+    getLogout();
   };
 
   return (

@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import styles from './XLogin.module.css';
 import { useAuth } from '../../hooks/useAuth';
+import { backendBaseUrl } from '../../helpers/baseUrl';
 
 const XLogin = () => {
   const { loginX } = useAuth();
@@ -14,15 +15,16 @@ const XLogin = () => {
   useEffect(() => {
     const handleXOnSuccess = async (token: string) => {
       try {
-        const response = await fetch(`http://localhost:4000/x/user`, {
-          method: 'GET',
+        const response = await fetch(`${backendBaseUrl}/x/user`, {
+          method: 'POST',
           headers: {
-            x_token: token
+            'x_token': token,
+            'Access-Control-Allow-Origin': backendBaseUrl
           }
         });
 
         if (!response.ok) {
-          throw new Error('Failed to fetch user info');
+          throw new Error('Erro ao buscar informações do usuário no X');
         }
 
         const userInfo = await response.json();
@@ -32,15 +34,14 @@ const XLogin = () => {
         loginX(token, userInfo);
         navigate('/admin');
       } catch (error) {
-        console.error('Error during X login:', error);
-        navigate('/login?error=fetch_user_failed');
+        console.error('Erro ao fazer login no X:', error);
+        navigate('/login?error=x');
       }
     };
 
-    if (token) {
-      handleXOnSuccess(token);
-    }
-  }, [token, loginX, navigate]);
+    token && handleXOnSuccess(token);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
 
   return (
     <div className={styles.container}>
