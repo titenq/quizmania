@@ -6,28 +6,17 @@ import lottieFacebook from '../../assets/lotties/facebook.json';
 import lottieX from '../../assets/lotties/x.json';
 import lottieGithub from '../../assets/lotties/github.json';
 import { backendBaseUrl } from '../../helpers/baseUrl';
+import HOST from '../../enums/Host';
 
 const Login = () => {
-  const handleGoogleLogin = () => {
-    window.location.href = `${backendBaseUrl}/google`;
-  };
-
-  const handleFacebookLogin = () => {
-    window.location.href = `${backendBaseUrl}/facebook`;
-  };
-
-  const handleXLogin = async () => {
-    window.location.href = `${backendBaseUrl}/x`;
-  };
-
-  const handleGithubLogin = () => {
-    window.location.href = `${backendBaseUrl}/github`;
+  const handleLogin = (host: HOST) => {
+    window.location.href = `${backendBaseUrl}/${host}`;
   };
 
   return (
     <div className={styles.container}>
       <button
-        onClick={handleGoogleLogin}
+        onClick={() => handleLogin(HOST.GOOGLE)}
         className={`${styles.loginButton} ${styles.googleButton}`}
       >
         <span className={styles.loginTitle}>Login com Google</span>
@@ -35,7 +24,7 @@ const Login = () => {
       </button>
 
       <button
-        onClick={handleXLogin}
+        onClick={() => handleLogin(HOST.X)}
         className={`${styles.loginButton} ${styles.xButton}`}
       >
         <span className={styles.loginTitle}>Login com X</span>
@@ -43,7 +32,7 @@ const Login = () => {
       </button>
 
       <button
-        onClick={handleFacebookLogin}
+        onClick={() => handleLogin(HOST.FACEBOOK)}
         className={`${styles.loginButton} ${styles.facebookButton}`}
       >
         <span className={styles.loginTitle}>Login com Facebook</span>
@@ -51,7 +40,7 @@ const Login = () => {
       </button>
 
       <button
-        onClick={handleGithubLogin}
+        onClick={() => handleLogin(HOST.GITHUB)}
         className={`${styles.loginButton} ${styles.githubButton}`}
       >
         <span className={styles.loginTitle}>Login com GitHub</span>

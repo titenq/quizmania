@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import Lottie from 'lottie-react';
 
@@ -9,31 +9,18 @@ import avatar from '../../assets/avatar.png';
 import { useAuth } from '../../hooks/useAuth';
 
 const Header = () => {
-  const location = useLocation();
   const { isLoggedIn, userInfo, logout } = useAuth();
   const [shouldAnimate, setShouldAnimate] = useState<string | null>(null);
-  const [loginAvatar, setLoginAvatar] = useState<string>(avatar);
 
   useEffect(() => {
     const hasAnimated = localStorage.getItem('hasAnimated');
 
     if (!hasAnimated) {
       setShouldAnimate('true');
+
       localStorage.setItem('hasAnimated', 'true');
     }
-  }, [location]);
-
-  useEffect(() => {
-    const facebookPicture = localStorage.getItem('facebook_picture');
-
-    if (facebookPicture) {
-      setLoginAvatar(facebookPicture);
-
-      return;
-    }
-
-    userInfo?.picture && setLoginAvatar(userInfo?.picture);
-  }, [userInfo?.picture, location]);
+  }, []);
 
   return (
     <div className={`${styles.container} ${shouldAnimate ? styles.animationToHeader : styles.container}`}>
@@ -74,7 +61,7 @@ const Header = () => {
             Logout
           </button>
           <img
-            src={loginAvatar}
+            src={userInfo?.picture || avatar}
             alt="avatar"
             className={styles.avatar}
             referrerPolicy="no-referrer"
