@@ -4,6 +4,9 @@ import IUser from '../interfaces/IUser';
 import IAuthContext from '../interfaces/IAuthContext';
 import IAuthProviderProps from '../interfaces/IAuthProviderProps';
 import { backendBaseUrl, frontendBaseUrl } from '../helpers/baseUrl.ts';
+import Host from '../enums/Host.ts';
+import TokenName from '../enums/TokenName.ts';
+import getUser from '../api/getUser.ts';
 
 const defaultAuthContext: IAuthContext = {
   isLoggedIn: false,
@@ -24,93 +27,10 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<IUser | null>(null);
 
   useEffect(() => {
-    const getGoogleUser = async (token: string) => {
-      const response = await fetch(`${backendBaseUrl}/google/user`, {
-        method: 'POST',
-        headers: {
-          'google_token': token
-        }
-      });
-
-      if (!response.ok) {
-        setIsLoggedIn(false);
-        setUser(null);
-
-        throw new Error('Erro ao buscar informações do usuário no Google');
-      }
-
-      const user = await response.json();
-
-      return user;
-    };
-
-    const getFacebookUser = async (token: string) => {
-      const response = await fetch(`${backendBaseUrl}/facebook/user`, {
-        method: 'POST',
-        headers: {
-          'facebook_token': token
-        }
-      });
-
-      if (!response.ok) {
-        setIsLoggedIn(false);
-        setUser(null);
-
-        throw new Error('Erro ao buscar informações do usuário no Facebook');
-      }
-
-      const user = await response.json();
-
-      setIsLoggedIn(true);
-      setUser(user);
-
-      return user;
-    };
-
-    const getGithubUser = async (token: string) => {
-      const response = await fetch(`${backendBaseUrl}/github/user`, {
-        method: 'POST',
-        headers: {
-          'github_token': token
-        }
-      });
-
-      if (!response.ok) {
-        setIsLoggedIn(false);
-        setUser(null);
-
-        throw new Error('Erro ao buscar informações do usuário no GitHub');
-      }
-
-      const user = await response.json();
-
-      return user;
-    };
-
-    const getXUser = async (token: string) => {
-      const response = await fetch(`${backendBaseUrl}/x/user`, {
-        method: 'POST',
-        headers: {
-          'facebook_token': token
-        }
-      });
-
-      if (!response.ok) {
-        setIsLoggedIn(false);
-        setUser(null);
-
-        throw new Error('Erro ao buscar informações do usuário no X');
-      }
-
-      const user = await response.json();
-
-      return user;
-    };
-
     const initAuth = async () => {
       if (googleTokenStorage) {
         try {
-          const user = await getGoogleUser(googleTokenStorage);
+          const user = await getUser(googleTokenStorage, Host.GOOGLE, TokenName.GOOGLE);
 
           setIsLoggedIn(true);
           setUser(user);
@@ -124,7 +44,7 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
 
       if (facebookTokenStorage) {
         try {
-          const user = await getFacebookUser(facebookTokenStorage);
+          const user = await getUser(facebookTokenStorage, Host.FACEBOOK, TokenName.FACEBOOK);
 
           setIsLoggedIn(true);
           setUser(user);
@@ -138,7 +58,7 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
 
       if (githubTokenStorage) {
         try {
-          const user = await getGithubUser(githubTokenStorage);
+          const user = await getUser(githubTokenStorage, Host.GITHUB, TokenName.GITHUB);
 
           setIsLoggedIn(true);
           setUser(user);
@@ -152,7 +72,7 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
 
       if (xTokenStorage) {
         try {
-          const user = await getXUser(xTokenStorage);
+          const user = await getUser(xTokenStorage, Host.X, TokenName.X);
 
           setIsLoggedIn(true);
           setUser(user);
