@@ -45,7 +45,7 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
     };
 
     const getFacebookUser = async (token: string) => {
-      const response = await fetch(`https://graph.facebook.com/me?fields=id,name,email&access_token=${token}`, {
+      const response = await fetch(`${backendBaseUrl}/facebook/user`, {
         method: 'POST',
         headers: {
           'facebook_token': token
@@ -61,16 +61,10 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
 
       const user = await response.json();
 
-      const userInfo = {
-        name: user.name,
-        email: user.email,
-        picture: `${backendBaseUrl}/uploads/facebook/${user.id}.jpg`
-      };
-
       setIsLoggedIn(true);
-      setUser(userInfo);
+      setUser(user);
 
-      return userInfo;
+      return user;
     };
 
     const getGithubUser = async (token: string) => {
