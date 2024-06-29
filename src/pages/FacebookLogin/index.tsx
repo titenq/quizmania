@@ -1,49 +1,34 @@
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import styles from './FacebookLogin.module.css';
-import { useAuth } from '../../hooks/useAuth';
-import { backendBaseUrl } from '../../helpers/baseUrl';
+import { AuthContext } from '../../context/AuthContext';
+import getUser from '../../api/getUser';
+import Host from '../../enums/Host';
+import TokenName from '../../enums/TokenName';
 
 const FacebookLogin = () => {
-  const { loginFacebook } = useAuth();
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-
   const token = searchParams.get('token');
 
   useEffect(() => {
-    const handleFacebookOnSuccess = async (token: string) => {
-      try {
-        const response = await fetch(`${backendBaseUrl}/facebook/user`, {
-          method: 'POST',
-          headers: {
-            'facebook_token': token
-          }
-        });
+    const getUserFacebook = async (token: string) => {
+      const user = await getUser(token, Host.FACEBOOK, TokenName.FACEBOOK);
 
-        if (!response.ok) {
-          throw new Error('Erro ao buscar informações do usuário no Facebook');
-        }
-
-        const user = await response.json();
-
-        localStorage.setItem('facebook_token', token);
-        localStorage.setItem('facebook_picture', user?.picture);
-        
-        loginFacebook(token, user);
-        navigate('/admin');
-      } catch (error) {
-        console.error('Erro ao fazer login no Facebook:', error);
-
-        navigate('/login?error=facebook');
+      if (!user) {
+        navigate(`/login?error=${Host.FACEBOOK}`);
       }
+
+      localStorage.setItem(TokenName.FACEBOOK, token);
+
+      login(user);
+      navigate('/admin');
     };
 
-    if (token) {
-      handleFacebookOnSuccess(token);
-    }
-  }, [token, loginFacebook, navigate]);
+    token && getUserFacebook(token);
+  }, [login, navigate, token]);
 
   return (
     <div className={styles.container}>

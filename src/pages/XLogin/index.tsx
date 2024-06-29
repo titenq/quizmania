@@ -1,47 +1,34 @@
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import styles from './XLogin.module.css';
-import { useAuth } from '../../hooks/useAuth';
-import { backendBaseUrl } from '../../helpers/baseUrl';
+import { AuthContext } from '../../context/AuthContext';
+import getUser from '../../api/getUser';
+import Host from '../../enums/Host';
+import TokenName from '../../enums/TokenName';
 
 const XLogin = () => {
-  const { loginX } = useAuth();
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-
   const token = searchParams.get('token');
 
   useEffect(() => {
-    const handleXOnSuccess = async (token: string) => {
-      try {
-        const response = await fetch(`${backendBaseUrl}/x/user`, {
-          method: 'POST',
-          headers: {
-            'x_token': token,
-            'Access-Control-Allow-Origin': backendBaseUrl
-          }
-        });
+    const getUserX = async (token: string) => {
+      const user = await getUser(token, Host.X, TokenName.X);
 
-        if (!response.ok) {
-          throw new Error('Erro ao buscar informações do usuário no X');
-        }
-
-        const userInfo = await response.json();
-
-        localStorage.setItem('x_token', token);
-        
-        loginX(token, userInfo);
-        navigate('/admin');
-      } catch (error) {
-        console.error('Erro ao fazer login no X:', error);
-        navigate('/login?error=x');
+      if (!user) {
+        navigate(`/login?error=${Host.X}`);
       }
+
+      localStorage.setItem(TokenName.X, token);
+
+      login(user);
+      navigate('/admin');
     };
 
-    token && handleXOnSuccess(token);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token]);
+    token && getUserX(token);
+  }, [login, navigate, token]);
 
   return (
     <div className={styles.container}>

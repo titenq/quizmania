@@ -1,17 +1,14 @@
 import { createContext, useState, useEffect, FC } from 'react';
 
-import { IUser } from '../interfaces/IUser';
-import { IAuthContext } from '../interfaces/IAuthContext';
-import { IAuthProviderProps } from '../interfaces/IAuthProviderProps';
+import IUser from '../interfaces/IUser';
+import IAuthContext from '../interfaces/IAuthContext';
+import IAuthProviderProps from '../interfaces/IAuthProviderProps';
 import { backendBaseUrl, frontendBaseUrl } from '../helpers/baseUrl.ts';
 
 const defaultAuthContext: IAuthContext = {
   isLoggedIn: false,
-  userInfo: null,
-  loginGoogle: () => {},
-  loginGithub: () => {},
-  loginX: () => {},
-  loginFacebook: () => {},
+  user: null,
+  login: () => {},
   logout: () => {}
 };
 
@@ -24,7 +21,7 @@ export const AuthContext = createContext<IAuthContext>(defaultAuthContext);
 
 export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  const [userInfo, setUserInfo] = useState<IUser | null>(null);
+  const [user, setUser] = useState<IUser | null>(null);
 
   useEffect(() => {
     const getGoogleUser = async (token: string) => {
@@ -37,7 +34,7 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
 
       if (!response.ok) {
         setIsLoggedIn(false);
-        setUserInfo(null);
+        setUser(null);
 
         throw new Error('Erro ao buscar informações do usuário no Google');
       }
@@ -57,7 +54,7 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
 
       if (!response.ok) {
         setIsLoggedIn(false);
-        setUserInfo(null);
+        setUser(null);
 
         throw new Error('Erro ao buscar informações do usuário no Facebook');
       }
@@ -71,7 +68,7 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
       };
 
       setIsLoggedIn(true);
-      setUserInfo(userInfo);
+      setUser(userInfo);
 
       return userInfo;
     };
@@ -86,7 +83,7 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
 
       if (!response.ok) {
         setIsLoggedIn(false);
-        setUserInfo(null);
+        setUser(null);
 
         throw new Error('Erro ao buscar informações do usuário no GitHub');
       }
@@ -106,7 +103,7 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
 
       if (!response.ok) {
         setIsLoggedIn(false);
-        setUserInfo(null);
+        setUser(null);
 
         throw new Error('Erro ao buscar informações do usuário no X');
       }
@@ -122,12 +119,12 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
           const user = await getGoogleUser(googleTokenStorage);
 
           setIsLoggedIn(true);
-          setUserInfo(user);
+          setUser(user);
         } catch (error) {
           console.error('Erro no login do Google:', error);
 
           setIsLoggedIn(false);
-          setUserInfo(null);
+          setUser(null);
         }
       }
 
@@ -136,12 +133,12 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
           const user = await getFacebookUser(facebookTokenStorage);
 
           setIsLoggedIn(true);
-          setUserInfo(user);
+          setUser(user);
         } catch (error) {
           console.error('Erro no login do Facebook:', error);
 
           setIsLoggedIn(false);
-          setUserInfo(null);
+          setUser(null);
         }
       }
 
@@ -150,12 +147,12 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
           const user = await getGithubUser(githubTokenStorage);
 
           setIsLoggedIn(true);
-          setUserInfo(user);
+          setUser(user);
         } catch (error) {
           console.error('Erro no login do GitHub:', error);
 
           setIsLoggedIn(false);
-          setUserInfo(null);
+          setUser(null);
         }
       }
 
@@ -164,12 +161,12 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
           const user = await getXUser(xTokenStorage);
 
           setIsLoggedIn(true);
-          setUserInfo(user);
+          setUser(user);
         } catch (error) {
           console.error('Erro no login do X:', error);
 
           setIsLoggedIn(false);
-          setUserInfo(null);
+          setUser(null);
         }
       }
     };
@@ -177,39 +174,16 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
     initAuth();
   }, []);
 
-  const loginGoogle = (token: string, userInfo: IUser) => {
-    localStorage.setItem('google_token', token);
-
+  const login = (user: IUser) => {
     setIsLoggedIn(true);
-    setUserInfo(userInfo);
-  };
-
-  const loginFacebook = (token: string, userInfo: IUser) => {
-    localStorage.setItem('facebook_token', token);
-
-    setIsLoggedIn(true);
-    setUserInfo(userInfo);
-  };
-
-  const loginGithub = (token: string, userInfo: IUser) => {
-    localStorage.setItem('github_token', token);
-
-    setIsLoggedIn(true);
-    setUserInfo(userInfo);
-  };
-
-  const loginX = (token: string, userInfo: IUser) => {
-    localStorage.setItem('x_token', token);
-
-    setIsLoggedIn(true);
-    setUserInfo(userInfo);
+    setUser(user);
   };
 
   const logout = () => {
     localStorage.clear();
 
     setIsLoggedIn(false);
-    setUserInfo(null);
+    setUser(null);
 
     const getLogout = async () => {
       try {
@@ -236,11 +210,8 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
       value={
         {
           isLoggedIn,
-          userInfo,
-          loginGoogle,
-          loginX,
-          loginGithub,
-          loginFacebook,
+          user,
+          login,
           logout,
         }
       }

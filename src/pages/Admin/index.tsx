@@ -1,15 +1,17 @@
+import { useContext } from 'react';
+
 import styles from './Admin.module.css';
-import { useAuth } from '../../hooks/useAuth';
+import { AuthContext } from '../../context/AuthContext';
 
 const Admin = () => {
-  const { userInfo } = useAuth();
+  const { user } = useContext(AuthContext);
 
   return (
     <div className={styles.container}>
       <h1>Admin</h1>
-      <p>{userInfo?.name}</p>
-      <p>{userInfo?.email}</p>
-      <p>{userInfo?.picture}</p>
+      <p>{user?.name}</p>
+      <p>{user?.email}</p>
+      <p>{user?.picture}</p>
     </div>
   );
 };

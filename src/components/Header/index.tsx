@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import Lottie from 'lottie-react';
@@ -6,10 +6,10 @@ import Lottie from 'lottie-react';
 import styles from './Header.module.css';
 import lottieQuiz from '../../assets/lotties/quiz.json';
 import avatar from '../../assets/avatar.png';
-import { useAuth } from '../../hooks/useAuth';
+import { AuthContext } from '../../context/AuthContext';
 
 const Header = () => {
-  const { isLoggedIn, userInfo, logout } = useAuth();
+  const { isLoggedIn, user, logout } = useContext(AuthContext);
   const [shouldAnimate, setShouldAnimate] = useState<string | null>(null);
 
   useEffect(() => {
@@ -61,7 +61,7 @@ const Header = () => {
             Logout
           </button>
           <img
-            src={userInfo?.picture || avatar}
+            src={user?.picture || avatar}
             alt="avatar"
             className={styles.avatar}
             referrerPolicy="no-referrer"

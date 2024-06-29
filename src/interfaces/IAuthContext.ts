@@ -1,11 +1,10 @@
-import { IUser } from './IUser';
+import IUser from './IUser';
 
-export interface IAuthContext {
+interface IAuthContext {
   isLoggedIn: boolean;
-  userInfo: IUser | null;
-  loginGoogle: (token: string, userInfo: IUser) => void;
-  loginX: (token: string, userInfo: IUser) => void;
-  loginGithub: (token: string, userInfo: IUser) => void;
-  loginFacebook: (token: string, userInfo: IUser) => void;
+  user: IUser | null;
+  login: (user: IUser) => void;
   logout: () => void;
 }
+
+export default IAuthContext;

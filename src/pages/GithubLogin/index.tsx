@@ -1,47 +1,34 @@
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import styles from './GithubLogin.module.css';
-import { useAuth } from '../../hooks/useAuth';
-import { backendBaseUrl } from '../../helpers/baseUrl';
+import { AuthContext } from '../../context/AuthContext';
+import getUser from '../../api/getUser';
+import Host from '../../enums/Host';
+import TokenName from '../../enums/TokenName';
 
 const GithubLogin = () => {
-  const { loginGithub } = useAuth();
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-
   const token = searchParams.get('token');
 
   useEffect(() => {
-    const handleGithubOnSuccess = async (token: string) => {
-      try {
-        const response = await fetch(`${backendBaseUrl}/github/user`, {
-          method: 'POST',
-          headers: {
-            github_token: token
-          }
-        });
+    const getUserGithub = async (token: string) => {
+      const user = await getUser(token, Host.GITHUB, TokenName.GITHUB);
 
-        if (!response.ok) {
-          throw new Error('Erro ao buscar informações do usuário no GitHub');
-        }
-
-        const userInfo = await response.json();
-
-        localStorage.setItem('github_token', token);
-        
-        loginGithub(token, userInfo);
-        navigate('/admin');
-      } catch (error) {
-        console.error('Erro ao fazer login no GitHub:', error);
-        navigate('/login?error=github');
+      if (!user) {
+        navigate(`/login?error=${Host.GITHUB}`);
       }
+
+      localStorage.setItem(TokenName.GITHUB, token);
+
+      login(user);
+      navigate('/admin');
     };
 
-    if (token) {
-      handleGithubOnSuccess(token);
-    }
-  }, [token, loginGithub, navigate]);
+    token && getUserGithub(token);
+  }, [login, navigate, token]);
 
   return (
     <div className={styles.container}>

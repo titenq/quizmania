@@ -1,47 +1,34 @@
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import styles from './GoogleLogin.module.css';
-import { useAuth } from '../../hooks/useAuth';
-import { backendBaseUrl } from '../../helpers/baseUrl';
+import { AuthContext } from '../../context/AuthContext';
+import TokenName from '../../enums/TokenName';
+import Host from '../../enums/Host';
+import getUser from '../../api/getUser';
 
 const GoogleLogin = () => {
-  const { loginGoogle } = useAuth();
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-
   const token = searchParams.get('token');
 
   useEffect(() => {
-    const handleGoogleOnSuccess = async (token: string) => {
-      try {
-        const response = await fetch(`${backendBaseUrl}/google/user`, {
-          method: 'POST',
-          headers: {
-            'google_token': token
-          }
-        });
-
-        if (!response.ok) {
-          throw new Error('Erro ao buscar informações do usuário no Google');
-        }
-
-        const userInfo = await response.json();
-
-        localStorage.setItem('google_token', token);
-        
-        loginGoogle(token, userInfo);
-        navigate('/admin');
-      } catch (error) {
-        console.error('Erro ao fazer login no Google:', error);
-        navigate('/login?error=google');
+    const getUserGoogle = async (token: string) => {
+      const user = await getUser(token, Host.GOOGLE, TokenName.GOOGLE);
+      
+      if (!user) {
+        navigate(`/login?error=${Host.GOOGLE}`);
       }
+
+      localStorage.setItem(TokenName.GOOGLE, token);
+
+      login(user);
+      navigate('/admin');
     };
 
-    if (token) {
-      handleGoogleOnSuccess(token);
-    }
-  }, [token, loginGoogle, navigate]);
+    token && getUserGoogle(token);
+  }, [login, navigate, token]);
 
   return (
     <div className={styles.container}>

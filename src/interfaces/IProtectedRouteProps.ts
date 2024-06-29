@@ -1,3 +1,5 @@
-export interface IProtectedRouteProps {
+interface IProtectedRouteProps {
   children: React.ReactElement;
 }
+
+export default IProtectedRouteProps;
