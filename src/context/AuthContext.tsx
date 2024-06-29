@@ -15,10 +15,10 @@ const defaultAuthContext: IAuthContext = {
   logout: () => {}
 };
 
-const googleTokenStorage = localStorage.getItem('google_token');
-const facebookTokenStorage = localStorage.getItem('facebook_token');
-const githubTokenStorage = localStorage.getItem('github_token');
-const xTokenStorage = localStorage.getItem('x_token');
+const googleToken = localStorage.getItem('google_token');
+const facebookToken = localStorage.getItem('facebook_token');
+const githubToken = localStorage.getItem('github_token');
+const xToken = localStorage.getItem('x_token');
 
 export const AuthContext = createContext<IAuthContext>(defaultAuthContext);
 
@@ -27,62 +27,25 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<IUser | null>(null);
 
   useEffect(() => {
+    const getUserInfo = async (token: string, host: Host, tokenName: TokenName) => {
+      try {
+        const user = await getUser(token, host, tokenName);
+
+        setIsLoggedIn(true);
+        setUser(user);
+      } catch (error) {
+        console.error(`Erro no login do ${host}:`, error);
+
+        setIsLoggedIn(false);
+        setUser(null);
+      }
+    };
+
     const initAuth = async () => {
-      if (googleTokenStorage) {
-        try {
-          const user = await getUser(googleTokenStorage, Host.GOOGLE, TokenName.GOOGLE);
-
-          setIsLoggedIn(true);
-          setUser(user);
-        } catch (error) {
-          console.error('Erro no login do Google:', error);
-
-          setIsLoggedIn(false);
-          setUser(null);
-        }
-      }
-
-      if (facebookTokenStorage) {
-        try {
-          const user = await getUser(facebookTokenStorage, Host.FACEBOOK, TokenName.FACEBOOK);
-
-          setIsLoggedIn(true);
-          setUser(user);
-        } catch (error) {
-          console.error('Erro no login do Facebook:', error);
-
-          setIsLoggedIn(false);
-          setUser(null);
-        }
-      }
-
-      if (githubTokenStorage) {
-        try {
-          const user = await getUser(githubTokenStorage, Host.GITHUB, TokenName.GITHUB);
-
-          setIsLoggedIn(true);
-          setUser(user);
-        } catch (error) {
-          console.error('Erro no login do GitHub:', error);
-
-          setIsLoggedIn(false);
-          setUser(null);
-        }
-      }
-
-      if (xTokenStorage) {
-        try {
-          const user = await getUser(xTokenStorage, Host.X, TokenName.X);
-
-          setIsLoggedIn(true);
-          setUser(user);
-        } catch (error) {
-          console.error('Erro no login do X:', error);
-
-          setIsLoggedIn(false);
-          setUser(null);
-        }
-      }
+      googleToken && getUserInfo(googleToken, Host.GOOGLE, TokenName.GOOGLE);
+      facebookToken && getUserInfo(facebookToken, Host.FACEBOOK, TokenName.FACEBOOK);
+      githubToken && getUserInfo(githubToken, Host.GITHUB, TokenName.GITHUB);
+      xToken && getUserInfo(xToken, Host.X, TokenName.X);
     };
 
     initAuth();
