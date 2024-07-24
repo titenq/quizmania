@@ -7,6 +7,7 @@ import { AuthContext } from '../../context/AuthContext';
 import { IQuestion } from '../../interfaces/IQuestion';
 import { IQuiz } from '../../interfaces/IQuiz';
 import { IModalErrorProps } from '../../interfaces/IModalErrorProps';
+import createQuiz from '../../api/quiz/createQuiz';
 
 const Admin = () => {
   const { user } = useContext(AuthContext);
@@ -32,7 +33,7 @@ const Admin = () => {
     setQuizTitle(event.target.value);
   };
 
-  const createQuiz = () => {
+  const creatingQuiz = () => {
     setIsCreateQuiz(true);
   };
 
@@ -110,17 +111,26 @@ const Admin = () => {
     return true;
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const quiz: IQuiz = {
-      quizTitle,
-      questions
-    };
-
-    if (validateForm()) {
-      console.log(quiz);
+    if (!validateForm()) {
+      return;
     }
+
+    let quiz: IQuiz | undefined;
+
+    if (user && user._id) {
+      quiz = {
+        userId: user._id,
+        quizTitle,
+        questions
+      };
+    }
+
+    const quizCreated = await createQuiz(quiz!);
+
+    console.log(quizCreated);
   };
 
   return (
@@ -128,7 +138,7 @@ const Admin = () => {
       <div className={styles.title_container}>
         <h1 className={styles.title}>{user?.name} Admin</h1>
 
-        <button className={`${styles.button_create} ${styles.neumorphism}`} onClick={createQuiz}>
+        <button className={`${styles.button_create} ${styles.neumorphism}`} onClick={creatingQuiz}>
           <span>Criar Quiz</span>
           <div className={styles.icon_button}>
             <span className={styles.icon}><FaPlusCircle size={22} /></span>
