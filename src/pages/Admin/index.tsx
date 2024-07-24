@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useContext, useState } from 'react';
+import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
 
 import { FaPlusCircle } from 'react-icons/fa';
 
@@ -6,11 +6,27 @@ import styles from './Admin.module.css';
 import { AuthContext } from '../../context/AuthContext';
 import { IQuestion } from '../../interfaces/IQuestion';
 import { IQuiz } from '../../interfaces/IQuiz';
+import { IModalErrorProps } from '../../interfaces/IModalErrorProps';
 
 const Admin = () => {
   const { user } = useContext(AuthContext);
   const [isCreateQuiz, setIsCreateQuiz] = useState(false);
   const [quizTitle, setQuizTitle] = useState('');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [showModalError, setShowModalError] = useState(false);
+  const [questions, setQuestions] = useState<IQuestion[]>([
+    { question: '', rightAnswer: '', wrongAnswers: ['', '', '', ''] }
+  ]);
+
+  useEffect(() => {
+    if (errorMessage) {
+      setShowModalError(true);
+    }
+  }, [errorMessage]);
+
+  const handleModalClose = () => {
+    setShowModalError(false);
+  };
 
   const handleQuizTitle = (event: ChangeEvent<HTMLInputElement>) => {
     setQuizTitle(event.target.value);
@@ -20,39 +36,78 @@ const Admin = () => {
     setIsCreateQuiz(true);
   };
 
-  const [questions, setQuestions] = useState<IQuestion[]>([
-    { question: '', rightAnswer: '', wrongAnswers: ['', '', '', ''] }
-  ]);
-
   const handleChange = (
     index: number,
     field: keyof IQuestion,
     value: string,
     answerIndex?: number
   ) => {
-    setQuestions(prevQuestions => {
-      return prevQuestions.map((q, i) => {
-        if (i === index) {
-          if (field === 'wrongAnswers' && answerIndex !== undefined) {
-            const updatedWrongAnswers = [...q.wrongAnswers];
-            updatedWrongAnswers[answerIndex] = value;
-
-            return { ...q, wrongAnswers: updatedWrongAnswers };
-          } else {
-            return { ...q, [field]: value };
-          }
+    setQuestions(prevQuestions =>
+      prevQuestions.map((question, questionIndex) => {
+        if (questionIndex !== index) {
+          return question;
         }
 
-        return q;
-      });
-    });
+        if (field === 'wrongAnswers' && answerIndex !== undefined) {
+          const updatedWrongAnswers = question.wrongAnswers.map((answer, idx) =>
+            idx === answerIndex ? value : answer
+          );
+
+          return { ...question, wrongAnswers: updatedWrongAnswers };
+        }
+
+        return { ...question, [field]: value };
+      })
+    );
   };
 
   const addQuestion = () => {
+    if (!validateForm()) {
+      return;
+    }
+
     setQuestions([
       ...questions,
       { question: '', rightAnswer: '', wrongAnswers: ['', '', '', ''] }
     ]);
+  };
+
+  const validateForm = () => {
+    if (!quizTitle) {
+      setErrorMessage('O título do Quiz não pode estar em branco');
+      setShowModalError(true);
+      return false;
+    }
+
+    for (let i = 0; i < questions.length; i++) {
+      const currentQuestion = questions[i];
+
+      if (!currentQuestion.question) {
+        setErrorMessage(`A pergunta ${i + 1} está em branco`);
+        setShowModalError(true);
+        return false;
+      }
+
+      if (!currentQuestion.rightAnswer) {
+        setErrorMessage(`A resposta correta da pergunta ${i + 1} está em branco`);
+        setShowModalError(true);
+        return false;
+      }
+
+      if (currentQuestion.wrongAnswers.some((wrongAnswer, index) => {
+        if (!wrongAnswer) {
+          setErrorMessage(`A resposta errada ${index + 1} da pergunta ${i + 1} está em branco`);
+          setShowModalError(true);
+          return true;
+        }
+        return false;
+      })) {
+        return false;
+      }
+    }
+
+    setErrorMessage(null);
+    return true;
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -63,7 +118,9 @@ const Admin = () => {
       questions
     };
 
-    console.log(quiz);
+    if (validateForm()) {
+      console.log(quiz);
+    }
   };
 
   return (
@@ -92,7 +149,7 @@ const Admin = () => {
       )}
 
       {isCreateQuiz && (
-        <form className={styles.form} noValidate onSubmit={handleSubmit}>
+        <form className={styles.form} onSubmit={handleSubmit} noValidate>
           <label className={styles.label} htmlFor="quizTitle">*Título do Quiz</label>
           <input
             type="text"
@@ -112,7 +169,7 @@ const Admin = () => {
                 id={`question${index}`}
                 className={`${styles.input} ${styles.neumorphism}`}
                 value={q.question}
-                onChange={(e) => handleChange(index, 'question', e.target.value)}
+                onChange={e => handleChange(index, 'question', e.target.value)}
               />
 
               <label className={styles.label} htmlFor={`rightAnswer${index}`}>*Resposta Correta</label>
@@ -122,7 +179,7 @@ const Admin = () => {
                 id={`rightAnswer${index}`}
                 className={`${styles.input} ${styles.neumorphism}`}
                 value={q.rightAnswer}
-                onChange={(e) => handleChange(index, 'rightAnswer', e.target.value)}
+                onChange={e => handleChange(index, 'rightAnswer', e.target.value)}
               />
 
               {q.wrongAnswers.map((answer, ansIndex) => (
@@ -134,7 +191,7 @@ const Admin = () => {
                     id={`wrongAnswer${index}${ansIndex}`}
                     className={`${styles.input} ${styles.neumorphism}`}
                     value={answer}
-                    onChange={(e) => handleChange(index, 'wrongAnswers', e.target.value, ansIndex)}
+                    onChange={e => handleChange(index, 'wrongAnswers', e.target.value, ansIndex)}
                   />
                 </div>
               ))}
@@ -142,6 +199,7 @@ const Admin = () => {
           ))}
 
           <button
+            type="button"
             onClick={addQuestion}
             className={`${styles.button_create} ${styles.neumorphism}`}
           >
@@ -150,7 +208,7 @@ const Admin = () => {
               <span className={styles.icon}><FaPlusCircle size={22} /></span>
             </div>
           </button>
-          
+
           <button
             type="submit"
             className={`${styles.button_create} ${styles.neumorphism} ${styles.submit}`}
@@ -159,8 +217,26 @@ const Admin = () => {
           </button>
         </form>
       )}
+
+      {showModalError && <ModalError errorMessage={errorMessage} handleModalClose={handleModalClose} />}
     </div>
   );
 };
+
+const ModalError = (props: IModalErrorProps) => (
+  <div className={styles.modal}>
+    <div className={styles.modal_content}>
+      <h2 className={styles.modal_text}>Erro</h2>
+      <p className={styles.modal_text}>{props.errorMessage}</p>
+      
+      <button
+        onClick={props.handleModalClose}
+        className={`${styles.button_create} ${styles.neumorphism} ${styles.button_modal_close}`}
+      >
+        Fechar
+      </button>
+    </div>
+  </div>
+);
 
 export default Admin;
