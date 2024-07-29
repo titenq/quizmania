@@ -8,8 +8,9 @@ import GoogleLogin from './pages/GoogleLogin';
 import FacebookLogin from './pages/FacebookLogin';
 import XLogin from './pages/XLogin';
 import GithubLogin from './pages/GithubLogin';
-import ProtectedRoute from './protectedRoutes/ProtectedRoute';
+import Quiz from './pages/Quiz';
 import NotFound from './pages/NotFound';
+import ProtectedRoute from './protectedRoutes/ProtectedRoute';
 
 const router = createBrowserRouter([
   {
@@ -44,6 +45,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <Admin />
+          </ProtectedRoute>
+        )
+      },
+      {
+        path: '/quiz',
+        element: (
+          <ProtectedRoute>
+            <Quiz />
           </ProtectedRoute>
         )
       },
