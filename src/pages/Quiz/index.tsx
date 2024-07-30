@@ -5,8 +5,7 @@ import { FaPlusCircle } from 'react-icons/fa';
 
 import styles from './Quiz.module.css';
 import { AuthContext } from '../../context/AuthContext';
-import { IQuestion } from '../../interfaces/IQuestion';
-import { IQuiz } from '../../interfaces/IQuiz';
+import { IQuiz, IQuestion } from '../../interfaces/IQuiz';
 import createQuiz from '../../api/quiz/createQuiz';
 import ModalError from '../../components/ModalError';
 
@@ -181,7 +180,7 @@ const Quiz = () => {
               onChange={e => handleChange(index, 'rightAnswer', e.target.value)}
             />
 
-            {q.wrongAnswers.map((answer, ansIndex) => (
+            {q.wrongAnswers.map((answer: string, ansIndex: number) => (
               <div key={ansIndex} className={`${styles.form} ${styles.wrong_answer}`}>
                 <label className={styles.label} htmlFor={`wrongAnswer${index}${ansIndex}`}>*Resposta Errada</label>
                 <input

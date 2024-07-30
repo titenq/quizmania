@@ -48,12 +48,12 @@ const Admin = () => {
       )}
 
       {quizzes && (
-        <table>
+        <table className={styles.neumorphism_table}>
           <thead>
             <tr>
               <th>Título</th>
-              <th>Data</th>
-              <th>Respostas</th>
+              <th style={{ width: '25%' }}>Data</th>
+              <th style={{ width: '10%' }}>Respostas</th>
             </tr>
           </thead>
 
@@ -62,14 +62,12 @@ const Admin = () => {
               <tr key={quiz._id}>
                 <td>{quiz.quizTitle}</td>
                 <td>{formatDate(quiz.createdAt)}</td>
-                <td></td>
+                <td>0</td>
               </tr>
             ))}
           </tbody>
         </table>
       )}
-
-      <div>{JSON.stringify(quizzes, null, 2)}</div>
     </div>
   );
 };
