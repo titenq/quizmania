@@ -11,6 +11,7 @@ import GithubLogin from './pages/GithubLogin';
 import Quiz from './pages/Quiz';
 import NotFound from './pages/NotFound';
 import ProtectedRoute from './protectedRoutes/ProtectedRoute';
+import QuizQuestion from './pages/QuizQuestion';
 
 const router = createBrowserRouter([
   {
@@ -54,6 +55,12 @@ const router = createBrowserRouter([
           <ProtectedRoute>
             <Quiz />
           </ProtectedRoute>
+        )
+      },
+      {
+        path: '/quiz/:quizId',
+        element: (
+          <QuizQuestion />
         )
       },
       {
