@@ -219,3 +219,7 @@
 .neumorphism_table tr:last-child td {
   border-bottom: none;
 }
+
+.link_icon {
+  color: #fff;
+}

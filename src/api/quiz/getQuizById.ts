@@ -4,7 +4,7 @@ const getQuizById = async (quizId: string) => {
   try {
     const apiKey = import.meta.env.VITE_API_KEY;
 
-    const response = await fetch(`${backendBaseUrl}/quizzes/questions/${quizId}`, {
+    const response = await fetch(`${backendBaseUrl}/quizzes/quiz/${quizId}`, {
       method: 'GET',
       headers: {
         'api_key': apiKey,

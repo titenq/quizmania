@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { FaPlusCircle } from 'react-icons/fa';
+import { FaPlusCircle, FaLink } from 'react-icons/fa';
 
 import styles from './Admin.module.css';
 import { AuthContext } from '../../context/AuthContext';
@@ -54,6 +54,7 @@ const Admin = () => {
               <th>Título</th>
               <th style={{ width: '25%' }}>Data</th>
               <th style={{ width: '10%' }}>Respostas</th>
+              <th style={{ width: '5%' }}>Link</th>
             </tr>
           </thead>
 
@@ -61,8 +62,13 @@ const Admin = () => {
             {quizzes.quizzes.map(quiz => (
               <tr key={quiz._id}>
                 <td>{quiz.quizTitle}</td>
-                <td>{formatDate(quiz.createdAt)}</td>
-                <td>0</td>
+                <td style={{ textAlign: 'center' }}>{formatDate(quiz.createdAt)}</td>
+                <td style={{ textAlign: 'center' }}>0</td>
+                <td style={{ textAlign: 'center' }}>
+                  <a href={`/quiz/${quiz._id}`} target='_blank' rel='noopener noreferrer'>
+                    <FaLink size={18} className={styles.link_icon} />
+                  </a>
+                </td>
               </tr>
             ))}
           </tbody>
