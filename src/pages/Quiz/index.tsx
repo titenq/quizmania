@@ -156,6 +156,7 @@ const Quiz = () => {
           className={`${styles.input} ${styles.neumorphism}`}
           value={quizTitle}
           onChange={handleQuizTitle}
+          spellCheck={false}
         />
 
         {questions.map((q, index) => (
@@ -168,6 +169,7 @@ const Quiz = () => {
               className={`${styles.input} ${styles.neumorphism}`}
               value={q.question}
               onChange={e => handleChange(index, 'question', e.target.value)}
+              spellCheck={false}
             />
 
             <label className={styles.label} htmlFor={`rightAnswer${index}`}>*Resposta Correta</label>
@@ -178,6 +180,7 @@ const Quiz = () => {
               className={`${styles.input} ${styles.neumorphism}`}
               value={q.rightAnswer}
               onChange={e => handleChange(index, 'rightAnswer', e.target.value)}
+              spellCheck={false}
             />
 
             {q.wrongAnswers.map((answer: string, ansIndex: number) => (
@@ -190,6 +193,7 @@ const Quiz = () => {
                   className={`${styles.input} ${styles.neumorphism}`}
                   value={answer}
                   onChange={e => handleChange(index, 'wrongAnswers', e.target.value, ansIndex)}
+                  spellCheck={false}
                 />
               </div>
             ))}
