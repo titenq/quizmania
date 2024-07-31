@@ -21,7 +21,7 @@ const Admin = () => {
   useEffect(() => {
     const getAllQuiz = async (userId: string, page: number) => {
       const response: IQuizzes = await getAllQuizByUserId(userId, page);
-      console.log(response)
+
       response && setQuizzes(response);
     };
 
