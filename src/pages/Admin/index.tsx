@@ -21,7 +21,7 @@ const Admin = () => {
   useEffect(() => {
     const getAllQuiz = async (userId: string, page: number) => {
       const response: IQuizzes = await getAllQuizByUserId(userId, page);
-
+      console.log(response)
       response && setQuizzes(response);
     };
 
@@ -41,13 +41,13 @@ const Admin = () => {
         </button>
       </div>
 
-      {!quizzes && (
+      {quizzes?.quizzes.length === 0 && (
         <p className={`${styles.no_quizzes} ${styles.neumorphism}`}>
           Você ainda não criou nenhum Quiz, clique em CRIAR QUIZ, é fácil e rápido!
         </p>
       )}
 
-      {quizzes && (
+      {quizzes?.quizzes.length !== 0 && (
         <table className={styles.neumorphism_table}>
           <thead>
             <tr>
@@ -59,7 +59,7 @@ const Admin = () => {
           </thead>
 
           <tbody>
-            {quizzes.quizzes.map(quiz => (
+            {quizzes?.quizzes.map(quiz => (
               <tr key={quiz._id}>
                 <td>{quiz.quizTitle}</td>
                 <td style={{ textAlign: 'center' }}>{formatDate(quiz.createdAt)}</td>
