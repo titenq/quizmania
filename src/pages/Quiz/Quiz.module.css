@@ -128,7 +128,8 @@
 .input {
   padding: 10px 20px;
   margin-bottom: 20px;
-  width: 600px;
+  width: 80vw;
+  max-width: 1080px;
   font-size: 14px;
 }
 

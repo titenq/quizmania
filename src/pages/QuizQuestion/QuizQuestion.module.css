@@ -9,6 +9,11 @@
   font-family: IBMPlexSans, sans-serif;
 }
 
+.quiz_title {
+  text-align: center;
+  margin: 0;
+}
+
 .quiz_container {
   width: 80vw;
   max-width: 1080px;
@@ -46,4 +51,8 @@
   justify-content: flex-start;
   gap: 20px;
   width: 100%;
+}
+
+.question_container {
+  cursor: pointer;
 }

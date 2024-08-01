@@ -17,41 +17,77 @@ const answerImages = [a, b, c, d, e];
 const QuizQuestion = () => {
   const { quizId } = useParams();
   const [quiz, setQuiz] = useState<IQuizResponse | null>(null);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [userAnswers, setUserAnswers] = useState<string[]>([]);
+  const [shuffledAnswers, setShuffledAnswers] = useState<string[]>([]);
 
   useEffect(() => {
     const getQuiz = async (quizId: string) => {
       const response = await getQuizById(quizId);
-
       setQuiz(response);
     };
 
-    quizId && getQuiz(quizId);
+    if (quizId) getQuiz(quizId);
   }, [quizId]);
+
+  useEffect(() => {
+    if (quiz && quiz.questions[currentQuestionIndex]) {
+      const currentQuestion = quiz.questions[currentQuestionIndex];
+      const answers = shuffleAnswers([currentQuestion.rightAnswer, ...currentQuestion.wrongAnswers]);
+      setShuffledAnswers(answers);
+    }
+  }, [quiz, currentQuestionIndex]);
+
+  const handleAnswerSelection = (answer: string) => {
+    setUserAnswers(prev => {
+      const newAnswers = [...prev];
+      newAnswers[currentQuestionIndex] = answer;
+      return newAnswers;
+    });
+  };
+
+  const handleNextQuestion = () => {
+    if (currentQuestionIndex < (quiz?.questions.length || 0) - 1) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
+    } else {
+      console.log('Quiz finished!', userAnswers);
+      // Aqui você pode adicionar lógica para enviar as respostas do usuário ao servidor ou processar o resultado.
+    }
+  };
+
+  const currentQuestion = quiz?.questions[currentQuestionIndex];
 
   return (
     <div className={styles.container}>
       {quiz && (
         <div>
-          <h2 style={{ textAlign: 'center' }}>{quiz.quizTitle}</h2>
-
-          {quiz.questions.map(item => {
-            const allAnswers = shuffleAnswers([item.rightAnswer, ...item.wrongAnswers]);
-
-            return (
-              <div key={item.question} className={styles.quiz_container}>
+          <h2 className={styles.quiz_title}>{quiz.quizTitle}</h2>
+          <div className={styles.quiz_container}>
+            {currentQuestion && (
+              <>
                 <div className={styles.answer_container}>
                   <img src={questionMark} alt='interrogação' />
-                  <p className={styles.neumorphism}>{item.question}</p>
+                  <p className={styles.neumorphism}>{currentQuestion.question}</p>
                 </div>
-                {allAnswers.map((answer: string, index: number) => (
-                  <div key={`${answer}-${index}`} className={styles.answer_container}>
+                {shuffledAnswers.map((answer: string, index: number) => (
+                  <div
+                    key={`${answer}-${index}`}
+                    className={`${styles.answer_container}
+                      ${styles.question_container} 
+                      ${userAnswers[currentQuestionIndex] === answer ? styles.selected : ''}`
+                    }
+                    onClick={() => handleAnswerSelection(answer)}
+                  >
                     <img src={answerImages[index]} alt={`alternativa-${index + 1}`} />
                     <p className={styles.neumorphism}>{answer}</p>
                   </div>
                 ))}
-              </div>
-            );
-          })}
+              </>
+            )}
+          </div>
+          <button onClick={handleNextQuestion}>
+            {currentQuestionIndex < (quiz?.questions.length || 0) - 1 ? 'Próximo' : 'Enviar'}
+          </button>
         </div>
       )}
     </div>
