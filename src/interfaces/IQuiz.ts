@@ -4,6 +4,11 @@ export interface IQuestion {
   wrongAnswers: string[];
 }
 
+export interface IQuestionModified {
+  question: string;
+  answers: string[];
+}
+
 export interface IQuiz {
   userId: string;
   quizTitle: string;
@@ -12,6 +17,14 @@ export interface IQuiz {
 
 export interface IQuizResponse extends IQuiz {
   _id: string;
+  createdAt: Date;
+}
+
+export interface IQuizModifiedResponse {
+  _id: string;
+  userId: string;
+  quizTitle: string;
+  questions: IQuestionModified[];
   createdAt: Date;
 }
 

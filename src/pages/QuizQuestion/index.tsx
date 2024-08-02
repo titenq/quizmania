@@ -2,9 +2,8 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import styles from './QuizQuestion.module.css';
-import { IQuizResponse } from '../../interfaces/IQuiz';
+import { IQuizModifiedResponse } from '../../interfaces/IQuiz';
 import getQuizById from '../../api/quiz/getQuizById';
-import shuffleAnswers from '../../helpers/shuffleAnswers';
 import questionMark from '../../assets/img/question-mark.png';
 import a from '../../assets/img/a.png';
 import b from '../../assets/img/b.png';
@@ -16,25 +15,26 @@ const answerImages = [a, b, c, d, e];
 
 const QuizQuestion = () => {
   const { quizId } = useParams();
-  const [quiz, setQuiz] = useState<IQuizResponse | null>(null);
+  const [quiz, setQuiz] = useState<IQuizModifiedResponse | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState<string[]>([]);
-  const [shuffledAnswers, setShuffledAnswers] = useState<string[]>([]);
+  const [currentAnswers, setCurrentAnswers] = useState<string[]>([]);
 
   useEffect(() => {
     const getQuiz = async (quizId: string) => {
-      const response = await getQuizById(quizId);
+      const response: IQuizModifiedResponse = await getQuizById(quizId);
+
       setQuiz(response);
     };
 
-    if (quizId) getQuiz(quizId);
+    quizId && getQuiz(quizId);
   }, [quizId]);
 
   useEffect(() => {
     if (quiz && quiz.questions[currentQuestionIndex]) {
       const currentQuestion = quiz.questions[currentQuestionIndex];
-      const answers = shuffleAnswers([currentQuestion.rightAnswer, ...currentQuestion.wrongAnswers]);
-      setShuffledAnswers(answers);
+
+      setCurrentAnswers(currentQuestion.answers);
     }
   }, [quiz, currentQuestionIndex]);
 
@@ -69,7 +69,7 @@ const QuizQuestion = () => {
                   <img src={questionMark} alt='interrogação' />
                   <p className={styles.neumorphism}>{currentQuestion.question}</p>
                 </div>
-                {shuffledAnswers.map((answer: string, index: number) => (
+                {currentAnswers.map((answer: string, index: number) => (
                   <div
                     key={`${answer}-${index}`}
                     className={`${styles.answer_container}
