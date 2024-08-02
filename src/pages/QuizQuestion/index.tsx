@@ -10,6 +10,8 @@ import b from '../../assets/img/b.png';
 import c from '../../assets/img/c.png';
 import d from '../../assets/img/d.png';
 import e from '../../assets/img/e.png';
+import Button from '../../components/Button';
+import { FaArrowCircleRight } from 'react-icons/fa';
 
 const answerImages = [a, b, c, d, e];
 
@@ -23,6 +25,8 @@ const QuizQuestion = () => {
   useEffect(() => {
     const getQuiz = async (quizId: string) => {
       const response: IQuizModifiedResponse = await getQuizById(quizId);
+
+      console.log(response)
 
       setQuiz(response);
     };
@@ -85,9 +89,13 @@ const QuizQuestion = () => {
               </>
             )}
           </div>
-          <button onClick={handleNextQuestion}>
-            {currentQuestionIndex < (quiz?.questions.length || 0) - 1 ? 'Próximo' : 'Enviar'}
-          </button>
+
+          <Button
+            type={currentQuestionIndex < (quiz?.questions.length || 0) - 1 ? 'button' : 'submit'}
+            title={currentQuestionIndex < (quiz?.questions.length || 0) - 1 ? 'Próximo' : 'Enviar'}
+            onClick={handleNextQuestion}
+            icon={<FaArrowCircleRight size={22} />}
+          />
         </div>
       )}
     </div>

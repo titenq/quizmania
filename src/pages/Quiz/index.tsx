@@ -8,6 +8,7 @@ import { AuthContext } from '../../context/AuthContext';
 import { IQuiz, IQuestion } from '../../interfaces/IQuiz';
 import createQuiz from '../../api/quiz/createQuiz';
 import ModalError from '../../components/ModalError';
+import Button from '../../components/Button';
 
 const Quiz = () => {
   const navigate = useNavigate();
@@ -200,23 +201,19 @@ const Quiz = () => {
           </div>
         ))}
 
-        <button
-          type="button"
-          onClick={addQuestion}
-          className={`${styles.button_create} ${styles.neumorphism}`}
-        >
-          <span>Adicionar Pergunta</span>
-          <div className={styles.icon_button}>
-            <span className={styles.icon}><FaPlusCircle size={22} /></span>
-          </div>
-        </button>
+        <div className={styles.buttons_container}>
+          <Button
+            type='button'
+            title='Adicionar Pergunta'
+            onClick={addQuestion}
+            icon={<FaPlusCircle size={22} />}
+          />
 
-        <button
-          type="submit"
-          className={`${styles.button_create} ${styles.neumorphism} ${styles.submit}`}
-        >
-          Enviar
-        </button>
+          <Button
+            type='submit'
+            title='Enviar'
+          />
+        </div>
       </form>
 
       {showModalError && <ModalError errorMessage={errorMessage} handleModalClose={handleModalClose} />}
