@@ -23,7 +23,6 @@ const QuizQuestion = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState<string[]>([]);
   const [currentAnswers, setCurrentAnswers] = useState<string[]>([]);
-  const [showModalError, setShowModalError] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -33,7 +32,6 @@ const QuizQuestion = () => {
       if ('error' in response) {
         setQuiz(null);
         setErrorMessage(response.message);
-        setShowModalError(true);
 
         return;
       }
@@ -56,6 +54,7 @@ const QuizQuestion = () => {
     setUserAnswers(prev => {
       const newAnswers = [...prev];
       newAnswers[currentQuestionIndex] = answer;
+
       return newAnswers;
     });
   };
@@ -109,7 +108,7 @@ const QuizQuestion = () => {
         </div>
       )}
 
-      {showModalError && <ModalError errorMessage={errorMessage} shouldNavigate={true} />}
+      <ModalError errorMessage={errorMessage} shouldNavigate={true} setErrorMessage={setErrorMessage} />
     </div>
   );
 };

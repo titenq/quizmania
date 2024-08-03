@@ -16,6 +16,8 @@ const ModalError = (props: IModalErrorProps) => {
 
   const handleModalClose = () => {
     setShowModalError(false);
+    props.setErrorMessage(null);
+
     if (props.shouldNavigate) {
       navigate('/');
     }

@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { FaPlusCircle } from 'react-icons/fa';
@@ -9,22 +9,16 @@ import { IQuiz, IQuestion } from '../../interfaces/IQuiz';
 import createQuiz from '../../api/quiz/createQuiz';
 import ModalError from '../../components/ModalError';
 import Button from '../../components/Button';
+import { IGenericError } from '../../interfaces/IGenericError';
 
 const Quiz = () => {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
   const [quizTitle, setQuizTitle] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [showModalError, setShowModalError] = useState(false);
   const [questions, setQuestions] = useState<IQuestion[]>([
     { question: '', rightAnswer: '', wrongAnswers: ['', '', '', ''] }
   ]);
-
-  useEffect(() => {
-    if (errorMessage) {
-      setShowModalError(true);
-    }
-  }, [errorMessage]);
 
   const handleQuizTitle = (event: ChangeEvent<HTMLInputElement>) => {
     setQuizTitle(event.target.value);
@@ -65,7 +59,6 @@ const Quiz = () => {
   const validateForm = () => {
     if (!quizTitle) {
       setErrorMessage('O título do Quiz não pode estar em branco');
-      setShowModalError(true);
 
       return false;
     }
@@ -75,14 +68,12 @@ const Quiz = () => {
 
       if (!currentQuestion.question) {
         setErrorMessage(`A pergunta ${i + 1} está em branco`);
-        setShowModalError(true);
 
         return false;
       }
 
       if (!currentQuestion.rightAnswer) {
         setErrorMessage(`A resposta correta da pergunta ${i + 1} está em branco`);
-        setShowModalError(true);
 
         return false;
       }
@@ -90,7 +81,6 @@ const Quiz = () => {
       if (currentQuestion.wrongAnswers.some((wrongAnswer, index) => {
         if (!wrongAnswer) {
           setErrorMessage(`A resposta errada ${index + 1} da pergunta ${i + 1} está em branco`);
-          setShowModalError(true);
 
           return true;
         }
@@ -109,6 +99,8 @@ const Quiz = () => {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    validateForm();
+
     if (!validateForm()) {
       return;
     }
@@ -123,10 +115,10 @@ const Quiz = () => {
       };
     }
 
-    const response = await createQuiz(quiz!);
+    const response: IQuiz | IGenericError = await createQuiz(quiz!);
 
-    if (response.error) {
-      setErrorMessage('Ocorreu um erro ao criar o Quiz');
+    if ('error' in response) {
+      setErrorMessage(response.message);
 
       return;
     }
@@ -208,7 +200,7 @@ const Quiz = () => {
         </div>
       </form>
 
-      {showModalError && <ModalError errorMessage={errorMessage} />}
+      <ModalError errorMessage={errorMessage} setErrorMessage={setErrorMessage} />
     </div>
   );
 };
