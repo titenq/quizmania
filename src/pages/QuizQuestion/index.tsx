@@ -12,21 +12,31 @@ import d from '../../assets/img/d.png';
 import e from '../../assets/img/e.png';
 import Button from '../../components/Button';
 import { FaArrowCircleRight } from 'react-icons/fa';
+import { IGenericError } from '../../interfaces/IGenericError';
+import ModalError from '../../components/ModalError';
 
 const answerImages = [a, b, c, d, e];
 
 const QuizQuestion = () => {
   const { quizId } = useParams();
-  const [quiz, setQuiz] = useState<IQuizModifiedResponse | null>(null);
+  const [quiz, setQuiz] = useState<IQuizModifiedResponse | null>();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState<string[]>([]);
   const [currentAnswers, setCurrentAnswers] = useState<string[]>([]);
+  const [showModalError, setShowModalError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const getQuiz = async (quizId: string) => {
-      const response: IQuizModifiedResponse = await getQuizById(quizId);
+      const response: IQuizModifiedResponse | IGenericError = await getQuizById(quizId);
 
-      console.log(response)
+      if ('error' in response) {
+        setQuiz(null);
+        setErrorMessage(response.message);
+        setShowModalError(true);
+
+        return;
+      }
 
       setQuiz(response);
     };
@@ -98,6 +108,8 @@ const QuizQuestion = () => {
           />
         </div>
       )}
+
+      {showModalError && <ModalError errorMessage={errorMessage} shouldNavigate={true} />}
     </div>
   );
 };

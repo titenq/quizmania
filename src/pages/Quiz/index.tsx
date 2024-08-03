@@ -26,10 +26,6 @@ const Quiz = () => {
     }
   }, [errorMessage]);
 
-  const handleModalClose = () => {
-    setShowModalError(false);
-  };
-
   const handleQuizTitle = (event: ChangeEvent<HTMLInputElement>) => {
     setQuizTitle(event.target.value);
   };
@@ -60,11 +56,7 @@ const Quiz = () => {
   };
 
   const addQuestion = () => {
-    if (!validateForm()) {
-      return;
-    }
-
-    setQuestions([
+    validateForm() && setQuestions([
       ...questions,
       { question: '', rightAnswer: '', wrongAnswers: ['', '', '', ''] }
     ]);
@@ -216,7 +208,7 @@ const Quiz = () => {
         </div>
       </form>
 
-      {showModalError && <ModalError errorMessage={errorMessage} handleModalClose={handleModalClose} />}
+      {showModalError && <ModalError errorMessage={errorMessage} />}
     </div>
   );
 };
