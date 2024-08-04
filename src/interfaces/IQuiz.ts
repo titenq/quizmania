@@ -33,3 +33,9 @@ export interface IQuizzes {
   currentPage: number;
   totalPages: number;
 }
+
+export interface IQuizCheckAnswerProps {
+  quizId: string;
+  question: string;
+  answer: string;
+}

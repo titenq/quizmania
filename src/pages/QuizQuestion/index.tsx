@@ -11,9 +11,10 @@ import c from '../../assets/img/c.png';
 import d from '../../assets/img/d.png';
 import e from '../../assets/img/e.png';
 import Button from '../../components/Button';
-import { FaArrowCircleRight, FaCloudUploadAlt } from 'react-icons/fa';
+import { FaArrowCircleRight, FaCloudUploadAlt, FaQuestion } from 'react-icons/fa';
 import { IGenericError } from '../../interfaces/IGenericError';
 import ModalError from '../../components/ModalError';
+import checkAnswer from '../../api/quiz/checkAnswer';
 
 const answerImages = [a, b, c, d, e];
 
@@ -25,6 +26,7 @@ const QuizQuestion = () => {
   const [currentAnswers, setCurrentAnswers] = useState<string[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [answered, setAnswered] = useState(false);
+  const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
 
   useEffect(() => {
     const getQuiz = async (quizId: string) => {
@@ -49,6 +51,7 @@ const QuizQuestion = () => {
     }
 
     setAnswered(false);
+    setIsCorrect(null); // Reseta o estado de correção da resposta
   }, [quiz, currentQuestionIndex]);
 
   const handleAnswerSelection = (answer: string) => {
@@ -61,12 +64,28 @@ const QuizQuestion = () => {
     setAnswered(true);
   };
 
+  const handleCheckAnswer = async () => {
+    if (quizId) {
+      const answerResponse = {
+        quizId: quizId,
+        question: currentQuestion!.question,
+        answer: userAnswers[currentQuestionIndex]
+      };
+  
+      const response = await checkAnswer(answerResponse);
+      console.log(response)
+  
+      setIsCorrect(response.isRight);
+    }
+  };
+
   const handleNextQuestion = () => {
     if (currentQuestionIndex < (quiz?.questions.length || 0) - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
 
     setAnswered(false);
+    setIsCorrect(null);
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -119,7 +138,16 @@ const QuizQuestion = () => {
           </div>
 
           <div className={styles.button_container}>
-            {answered && currentQuestionIndex < (quiz?.questions.length || 0) - 1 && (
+            {answered && isCorrect === null && (
+              <Button
+                type="button"
+                title="Responder"
+                onClick={handleCheckAnswer}
+                icon={<FaQuestion size={22} />}
+              />
+            )}
+
+            {isCorrect !== null && currentQuestionIndex < (quiz?.questions.length || 0) - 1 && (
               <Button
                 type="button"
                 title="Próximo"
@@ -128,7 +156,7 @@ const QuizQuestion = () => {
               />
             )}
 
-            {answered && currentQuestionIndex === (quiz?.questions.length || 0) - 1 && (
+            {isCorrect !== null && currentQuestionIndex === (quiz?.questions.length || 0) - 1 && (
               <Button
                 type="submit"
                 title="Enviar"
