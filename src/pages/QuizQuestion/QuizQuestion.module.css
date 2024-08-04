@@ -14,9 +14,21 @@
   margin: 0;
 }
 
+.total_questions {
+  font-size: 14px;
+}
+
 .quiz_container {
   width: 80vw;
   max-width: 1080px;
+}
+
+.answer_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  animation: slideInRight 0.25s ease forwards;
 }
 
 .neumorphism {
@@ -28,6 +40,7 @@
   transition: all 0.2s ease;
   border: 1px solid #292929;
   padding: 10px 20px;
+  margin: 0;
   width: 100%;
 }
 
@@ -45,14 +58,101 @@
   opacity: 1;
 }
 
-.answer_container {
+.quiz_form {
+  width: 80vw;
+  max-width: 1080px;
+}
+
+.radio_input {
+  display: none;
+}
+
+.answer_wrapper {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  gap: 20px;
-  width: 100%;
 }
 
 .question_container {
+  display: flex;
+  align-items: center;
   cursor: pointer;
+}
+
+.question_container:nth-child(1) {
+  animation: slideInRight 0.25s ease forwards;
+}
+
+.question_container:nth-child(2) {
+  animation: slideInRight 0.5s ease forwards;
+}
+
+.question_container:nth-child(3) {
+  animation: slideInRight 0.75s ease forwards;
+}
+
+.question_container:nth-child(4) {
+  animation: slideInRight 1s ease forwards;
+}
+
+.question_container:nth-child(5) {
+  animation: slideInRight 1.25s ease forwards;
+}
+
+.question_container:nth-child(6) {
+  animation: slideInRight 1.5s ease forwards;
+}
+
+.question {
+  color: #e0e0e0;
+  background: linear-gradient(to bottom, #2e2e2e, #3c3c3c);
+  border: 1px solid #4a4a4a;
+  padding: 12px 24px;
+  margin: 20px 0;
+}
+
+.question::before {
+  background: linear-gradient(to bottom, #3c3c3c, #1c1c1c);
+  opacity: 0.8;
+}
+
+.answer_image_container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.answer_image_container img {
+  width: 40px;
+  height: 40px;
+}
+
+.answer_image_container:hover {
+  background-color: #2a2a2a;
+}
+
+.radio_input:checked + .question_container .answer_image_container {
+  background-color: #4caf50;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+.button_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 40px;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
