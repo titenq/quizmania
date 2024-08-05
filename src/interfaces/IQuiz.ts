@@ -39,3 +39,9 @@ export interface IQuizCheckAnswerProps {
   question: string;
   answer: string;
 }
+
+export interface IQuizAnswers {
+  question: string;
+  answer: string;
+  isRight: boolean;
+}

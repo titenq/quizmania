@@ -2,7 +2,7 @@ import { FormEvent, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import styles from './QuizQuestion.module.css';
-import { IQuizModifiedResponse } from '../../interfaces/IQuiz';
+import { IQuizAnswers, IQuizModifiedResponse } from '../../interfaces/IQuiz';
 import getQuizById from '../../api/quiz/getQuizById';
 import questionMark from '../../assets/img/question-mark.png';
 import a from '../../assets/img/a.png';
@@ -22,7 +22,7 @@ const QuizQuestion = () => {
   const { quizId } = useParams();
   const [quiz, setQuiz] = useState<IQuizModifiedResponse | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [userAnswers, setUserAnswers] = useState<string[]>([]);
+  const [userAnswers, setUserAnswers] = useState<IQuizAnswers[]>([]);
   const [currentAnswers, setCurrentAnswers] = useState<string[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [answered, setAnswered] = useState(false);
@@ -36,6 +36,7 @@ const QuizQuestion = () => {
       if ('error' in response) {
         setQuiz(null);
         setErrorMessage(response.message);
+
         return;
       }
 
@@ -48,18 +49,26 @@ const QuizQuestion = () => {
   useEffect(() => {
     if (quiz && quiz.questions[currentQuestionIndex]) {
       const currentQuestion = quiz.questions[currentQuestionIndex];
+
       setCurrentAnswers(currentQuestion.answers);
     }
 
     setAnswered(false);
-    setIsCorrect(null); // Reseta o estado de correção da resposta
-    setRightAnswer(null); // Reseta a resposta correta
+    setIsCorrect(null);
+    setRightAnswer(null);
   }, [quiz, currentQuestionIndex]);
 
   const handleAnswerSelection = (answer: string) => {
     setUserAnswers(prev => {
       const newAnswers = [...prev];
-      newAnswers[currentQuestionIndex] = answer;
+      const currentQuestionText = quiz?.questions[currentQuestionIndex].question || '';
+
+      newAnswers[currentQuestionIndex] = {
+        question: currentQuestionText,
+        answer,
+        isRight: false
+      };
+
       return newAnswers;
     });
 
@@ -69,16 +78,22 @@ const QuizQuestion = () => {
   const handleCheckAnswer = async () => {
     if (quizId) {
       const answerResponse = {
-        quizId: quizId,
+        quizId,
         question: currentQuestion!.question,
-        answer: userAnswers[currentQuestionIndex]
+        answer: userAnswers[currentQuestionIndex].answer
       };
 
       const response = await checkAnswer(answerResponse);
-      console.log(response)
 
       setIsCorrect(response.isRight);
       setRightAnswer(response.rightAnswer);
+
+      setUserAnswers(prev => {
+        const newAnswers = [...prev];
+        newAnswers[currentQuestionIndex].isRight = response.isRight;
+
+        return newAnswers;
+      });
     }
   };
 
@@ -94,6 +109,7 @@ const QuizQuestion = () => {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     console.log(userAnswers);
   };
 
@@ -116,7 +132,7 @@ const QuizQuestion = () => {
                 </div>
 
                 {currentAnswers.map((answer: string, index: number) => {
-                  const isSelected = userAnswers[currentQuestionIndex] === answer;
+                  const isSelected = userAnswers[currentQuestionIndex]?.answer === answer;
                   const isRightAnswer = rightAnswer === answer;
 
                   return (
