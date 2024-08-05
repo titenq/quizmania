@@ -10,6 +10,8 @@ import b from '../../assets/img/b.png';
 import c from '../../assets/img/c.png';
 import d from '../../assets/img/d.png';
 import e from '../../assets/img/e.png';
+import acertou from '../../assets/img/acertou.png';
+import errou from '../../assets/img/errou.png';
 import Button from '../../components/Button';
 import { FaArrowCircleRight, FaCloudUploadAlt, FaQuestion } from 'react-icons/fa';
 import { IGenericError } from '../../interfaces/IGenericError';
@@ -159,6 +161,12 @@ const QuizQuestion = () => {
                     </div>
                   );
                 })}
+
+                {answered && isCorrect !== null && (
+                  <div className={styles.result_image_container}>
+                    <img src={isCorrect ? acertou : errou} alt={isCorrect ? 'Acertou' : 'Errou'} />
+                  </div>
+                )}
               </>
             )}
           </div>
