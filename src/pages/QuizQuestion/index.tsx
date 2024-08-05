@@ -27,6 +27,7 @@ const QuizQuestion = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [answered, setAnswered] = useState(false);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+  const [rightAnswer, setRightAnswer] = useState<string | null>(null);
 
   useEffect(() => {
     const getQuiz = async (quizId: string) => {
@@ -52,6 +53,7 @@ const QuizQuestion = () => {
 
     setAnswered(false);
     setIsCorrect(null); // Reseta o estado de correção da resposta
+    setRightAnswer(null); // Reseta a resposta correta
   }, [quiz, currentQuestionIndex]);
 
   const handleAnswerSelection = (answer: string) => {
@@ -71,11 +73,12 @@ const QuizQuestion = () => {
         question: currentQuestion!.question,
         answer: userAnswers[currentQuestionIndex]
       };
-  
+
       const response = await checkAnswer(answerResponse);
       console.log(response)
-  
+
       setIsCorrect(response.isRight);
+      setRightAnswer(response.rightAnswer);
     }
   };
 
@@ -86,6 +89,7 @@ const QuizQuestion = () => {
 
     setAnswered(false);
     setIsCorrect(null);
+    setRightAnswer(null);
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -111,28 +115,34 @@ const QuizQuestion = () => {
                   <p className={`${styles.neumorphism} ${styles.question}`}>{currentQuestion.question}</p>
                 </div>
 
-                {currentAnswers.map((answer: string, index: number) => (
-                  <div key={`${answer}-${index}`} className={styles.answer_wrapper}>
-                    <input
-                      type="radio"
-                      name="answer"
-                      value={answer}
-                      checked={userAnswers[currentQuestionIndex] === answer}
-                      onChange={() => handleAnswerSelection(answer)}
-                      className={styles.radio_input}
-                      id={`answer-${index}`}
-                    />
-                    <label
-                      htmlFor={`answer-${index}`}
-                      className={`${styles.question_container} ${userAnswers[currentQuestionIndex] === answer ? styles.selected : ''}`}
-                    >
-                      <div className={styles.answer_image_container}>
-                        <img src={answerImages[index]} alt={`alternativa-${index + 1}`} />
-                        <p className={styles.neumorphism}>{answer}</p>
-                      </div>
-                    </label>
-                  </div>
-                ))}
+                {currentAnswers.map((answer: string, index: number) => {
+                  const isSelected = userAnswers[currentQuestionIndex] === answer;
+                  const isRightAnswer = rightAnswer === answer;
+
+                  return (
+                    <div key={`${answer}-${index}`} className={styles.answer_wrapper}>
+                      <input
+                        type="radio"
+                        name="answer"
+                        value={answer}
+                        checked={isSelected}
+                        onChange={() => handleAnswerSelection(answer)}
+                        className={styles.radio_input}
+                        id={`answer-${index}`}
+                        disabled={isCorrect !== null} 
+                      />
+                      <label
+                        htmlFor={`answer-${index}`}
+                        className={`${styles.question_container} ${isSelected ? styles.selected : ''} ${isRightAnswer ? styles.correct_answer : ''}`}
+                      >
+                        <div className={styles.answer_image_container}>
+                          <img src={answerImages[index]} alt={`alternativa-${index + 1}`} />
+                          <p className={styles.neumorphism}>{answer}</p>
+                        </div>
+                      </label>
+                    </div>
+                  );
+                })}
               </>
             )}
           </div>

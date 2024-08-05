@@ -135,8 +135,13 @@
 }
 
 .radio_input:checked + .question_container .answer_image_container {
-  background-color: #4caf50;
-  box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+  background-color: #7a7878;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+}
+
+.correct_answer .answer_image_container {
+  background-color: #008000 !important;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.8) !important;
 }
 
 .button_container {
