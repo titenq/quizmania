@@ -126,7 +126,7 @@ const QuizQuestion = () => {
           <div className={styles.quiz_container}>
             {currentQuestion && (
               <>
-                <div className={styles.answer_container}>
+                <div className={styles.answer_container} key={currentQuestionIndex}>
                   <img src={questionMark} alt='interrogação' />
                   <p className={`${styles.neumorphism} ${styles.question}`}>{currentQuestion.question}</p>
                 </div>

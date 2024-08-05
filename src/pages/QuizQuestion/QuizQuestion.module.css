@@ -29,7 +29,7 @@
   justify-content: center;
   align-items: center;
   gap: 20px;
-  animation: slideInRight 0.2s linear forwards;
+  animation: slideInRight 0.3s linear forwards;
 }
 
 .neumorphism {
@@ -55,7 +55,7 @@
   background: linear-gradient(to bottom, #292929, #000000);
   z-index: -1;
   border-radius: 9999px;
-  transition: all 0.2s ease;
+  transition: all 0.5s ease;
   opacity: 1;
 }
 
@@ -79,28 +79,24 @@
   cursor: pointer;
 }
 
-.answer_wrapper:nth-child(1) {
-  animation: slideInRight 0.2s linear forwards;
-}
-
 .answer_wrapper:nth-child(2) {
   animation: slideInRight 0.4s linear forwards;
 }
 
 .answer_wrapper:nth-child(3) {
-  animation: slideInRight 0.6s linear forwards;
+  animation: slideInRight 0.5s linear forwards;
 }
 
 .answer_wrapper:nth-child(4) {
-  animation: slideInRight 0.8s linear forwards;
+  animation: slideInRight 0.6s linear forwards;
 }
 
 .answer_wrapper:nth-child(5) {
-  animation: slideInRight 1s linear forwards;
+  animation: slideInRight 0.7s linear forwards;
 }
 
 .answer_wrapper:nth-child(6) {
-  animation: slideInRight 1.2s linear forwards;
+  animation: slideInRight 0.8s linear forwards;
 }
 
 .question {
