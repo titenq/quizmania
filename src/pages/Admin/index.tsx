@@ -9,33 +9,13 @@ import getAllQuizByUserId from '../../api/quiz/getAllQuizByUserId';
 import { IQuizzes } from '../../interfaces/IQuiz';
 import formatDate from '../../helpers/formatDate';
 import Button from '../../components/Button';
-import { IAnswersCreateResponse, IAnswersGet, IAnswersPercentage } from '../../interfaces/IAnswer';
-import getAnswers from '../../api/answer/getAnswers';
-
-const getQuizPercentages = (responseQuizzes: IAnswersCreateResponse[][]) => {
-  const calculatePercentage = (total: number, correct: number) => (total === 0 ? 0 : (correct / total) * 100);
-
-  return responseQuizzes.map((quizGroup) => {
-    const totalAnswers = quizGroup.reduce((sum, quiz) => sum + quiz.totalAnswers, 0);
-    const rightAnswers = quizGroup.reduce((sum, quiz) => sum + quiz.rightAnswers, 0);
-    const wrongAnswers = quizGroup.reduce((sum, quiz) => sum + quiz.wrongAnswers, 0);
-
-    const percentRight = calculatePercentage(totalAnswers, rightAnswers);
-    const percentWrong = calculatePercentage(totalAnswers, wrongAnswers);
-
-    return {
-      percentRight: parseFloat(percentRight.toFixed(2)),
-      percentWrong: parseFloat(percentWrong.toFixed(2))
-    };
-  });
-};
+import { IAnswersPercentage } from '../../interfaces/IAnswer';
+import getAnswersPercentage from '../../api/answer/getAnswersPercentage';
 
 const Admin = () => {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
   const [quizzes, setQuizzes] = useState<IQuizzes | null>(null);
-  const [quizzesId, setQuizzesId] = useState<string[]>([]);
-  const [responseQuizzes, setResponseQuizzes] = useState<IAnswersGet[][]>([]);
   const [answersPercentage, setAnswersPercentage] = useState<IAnswersPercentage[]>([]);
 
   const creatingQuiz = () => {
@@ -47,34 +27,20 @@ const Admin = () => {
       const response: IQuizzes = await getAllQuizByUserId(userId, page);
 
       response && setQuizzes(response);
-      response && setQuizzesId(response.quizzes.map(quiz => quiz?._id));
     };
 
     user && getAllQuiz(user._id, 1);
   }, [user]);
 
   useEffect(() => {
-    const getAnswersByQuizId = async (quizId: string) => {
-      const response: IAnswersCreateResponse[] = await getAnswers(quizId);
+    const fetchAnswersPercentage = async (userId: string, page: number) => {
+      const response: IAnswersPercentage[] = await getAnswersPercentage(userId, page);
 
-      return response;
+      response && setAnswersPercentage(response);
     };
 
-    const responseQuizzes: IAnswersCreateResponse[][] = [];
-
-    const responseGetAllAnswers = async () => {
-      for await (const quizId of quizzesId) {
-        const response = await getAnswersByQuizId(quizId);
-
-        responseQuizzes.push(response);
-      }
-
-      setAnswersPercentage(getQuizPercentages(responseQuizzes));
-      setResponseQuizzes(responseQuizzes);
-    };
-
-    responseGetAllAnswers();
-  }, [quizzesId]);
+    user && fetchAnswersPercentage(user._id, 1);
+  }, [user]);
 
   return (
     <div className={styles.container}>
@@ -113,15 +79,15 @@ const Admin = () => {
                 <td style={{ textAlign: 'center' }}>{formatDate(quiz.createdAt)}</td>
                 <td style={{ textAlign: 'center' }}>
                   <div className={styles.percentage}>
-                    <span>
-                      {responseQuizzes[index] && responseQuizzes[index].length}
+                    <span className={styles.icon_container}>
+                      {answersPercentage[index] && answersPercentage[index].answersLength}
                       <FaQuestionCircle size={22} />
                     </span>
-                    <span>
+                    <span className={styles.icon_container}>
                       {answersPercentage[index] && answersPercentage[index].percentRight}%
                       <FaCheckCircle size={22} style={{ color: '#00ff00'}} />
                     </span>
-                    <span>
+                    <span className={styles.icon_container}>
                       {answersPercentage[index] && answersPercentage[index].percentWrong}%
                       <FaTimesCircle size={22} style={{ color: '#ff0000' }} />
                     </span>

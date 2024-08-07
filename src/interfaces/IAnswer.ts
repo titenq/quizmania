@@ -9,11 +9,6 @@ export interface IAnswers {
   answers: IAnswer[];
 }
 
-export interface IAnswersPercentage {
-  percentRight: number;
-  percentWrong: number;
-}
-
 export interface IAnswersCreateResponse {
   _id: string;
   quizId: string;
@@ -29,4 +24,10 @@ export interface IAnswersGet {
   answers: IAnswer[];
   quizId: string;
   createdAt: Date;
+}
+
+export interface IAnswersPercentage {
+  answersLength: number;
+  percentRight: number;
+  percentWrong: number;
 }
