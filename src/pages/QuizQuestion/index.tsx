@@ -17,6 +17,8 @@ import { FaArrowCircleRight, FaCloudUploadAlt, FaQuestion } from 'react-icons/fa
 import { IGenericError } from '../../interfaces/IGenericError';
 import ModalError from '../../components/ModalError';
 import checkAnswer from '../../api/quiz/checkAnswer';
+import { IAnswers, IAnswersCreateResponse } from '../../interfaces/IAnswer';
+import createAnswer from '../../api/answer/createAnswer';
 
 const answerImages = [a, b, c, d, e];
 
@@ -30,6 +32,8 @@ const QuizQuestion = () => {
   const [answered, setAnswered] = useState(false);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [rightAnswer, setRightAnswer] = useState<string | null>(null);
+  const [resultMessage, setResultMessage] = useState<string | null>(null);
+
 
   useEffect(() => {
     const getQuiz = async (quizId: string) => {
@@ -109,10 +113,35 @@ const QuizQuestion = () => {
     setRightAnswer(null);
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    console.log(userAnswers);
+    const answers: IAnswers = {
+      quizId: quizId!,
+      answers: userAnswers
+    };
+
+    const postCreateAnswer: IAnswersCreateResponse = await createAnswer(answers);
+
+    if (postCreateAnswer) {
+      const totalAnswers = postCreateAnswer.totalAnswers;
+      const rightAnswers = postCreateAnswer.rightAnswers;
+      const percentage = (rightAnswers / totalAnswers) * 100;
+
+      const percentageMessages = [
+        { threshold: 100, message: " - Sensacional!" },
+        { threshold: 50, message: " - Parabéns!" },
+        { threshold: 0, message: " - Pode melhorar!" }
+      ];
+
+      const getMessage = (percentage: number) =>
+        percentageMessages.find(({ threshold }) =>
+          percentage >= threshold)?.message || '';
+
+      const message = `Você acertou ${rightAnswers} de ${totalAnswers} pergunta${totalAnswers > 1 ? 's' : ''}${getMessage(percentage)}`;
+
+      setResultMessage(message);
+    }
   };
 
   const currentQuestion = quiz?.questions[currentQuestionIndex];
@@ -199,6 +228,12 @@ const QuizQuestion = () => {
             )}
           </div>
         </form>
+      )}
+
+      {resultMessage && (
+        <div className={styles.result_message}>
+          {resultMessage}
+        </div>
       )}
 
       <ModalError errorMessage={errorMessage} shouldNavigate={true} setErrorMessage={setErrorMessage} />
