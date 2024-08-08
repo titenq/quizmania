@@ -34,7 +34,6 @@ const QuizQuestion = () => {
   const [rightAnswer, setRightAnswer] = useState<string | null>(null);
   const [resultMessage, setResultMessage] = useState<string | null>(null);
 
-
   useEffect(() => {
     const getQuiz = async (quizId: string) => {
       const response: IQuizModifiedResponse | IGenericError = await getQuizById(quizId);
