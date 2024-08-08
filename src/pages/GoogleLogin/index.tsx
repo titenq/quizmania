@@ -5,7 +5,7 @@ import styles from './GoogleLogin.module.css';
 import AuthContext from '../../context/AuthContext';
 import TokenName from '../../enums/TokenName';
 import Host from '../../enums/Host';
-import getUser from '../../api/getUser';
+import getUser from '../../api/user/getUser';
 
 const GoogleLogin = () => {
   const { login } = useContext(AuthContext);

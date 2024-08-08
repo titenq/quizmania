@@ -1,6 +1,6 @@
-import Host from '../enums/Host';
-import TokenName from '../enums/TokenName';
-import { backendBaseUrl } from '../helpers/baseUrl';
+import Host from '../../enums/Host';
+import TokenName from '../../enums/TokenName';
+import { backendBaseUrl } from '../../helpers/baseUrl';
 
 const getUser = async (token: string, host: Host, tokenName: TokenName) => {
   try {

@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import styles from './GithubLogin.module.css';
 import AuthContext from '../../context/AuthContext';
-import getUser from '../../api/getUser';
+import getUser from '../../api/user/getUser';
 import Host from '../../enums/Host';
 import TokenName from '../../enums/TokenName';
 
