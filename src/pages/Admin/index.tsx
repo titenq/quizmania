@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaCheckCircle, FaPlusCircle, FaLink, FaTimesCircle, FaQuestionCircle } from 'react-icons/fa';
 
 import styles from './Admin.module.css';
-import { AuthContext } from '../../context/AuthContext';
+import AuthContext from '../../context/AuthContext';
 import getAllQuizByUserId from '../../api/quiz/getAllQuizByUserId';
 import { IQuizzes } from '../../interfaces/IQuiz';
 import formatDate from '../../helpers/formatDate';
@@ -41,6 +41,10 @@ const Admin = () => {
 
     user && fetchAnswersPercentage(user._id, 1);
   }, [user]);
+
+  const handleAnswers = (quizId: string) => {
+    navigate(`/quiz/${quizId}/answers`);
+  };
 
   return (
     <div className={styles.container}>
@@ -79,17 +83,21 @@ const Admin = () => {
                 <td style={{ textAlign: 'center' }}>{formatDate(quiz.createdAt)}</td>
                 <td style={{ textAlign: 'center' }}>
                   <div className={styles.percentage}>
-                    <span className={styles.icon_container}>
+                    <span
+                      className={styles.icon_container}
+                      onClick={() => handleAnswers(quiz._id)}
+                      style={{ cursor: 'pointer' }}
+                    >
                       {answersPercentage[index] && answersPercentage[index].answersLength}
                       <FaQuestionCircle size={22} />
                     </span>
                     <span className={styles.icon_container}>
                       {answersPercentage[index] && answersPercentage[index].percentRight}%
-                      <FaCheckCircle size={22} style={{ color: '#00ff00'}} />
+                      <FaCheckCircle size={22} style={{ color: '#00c853'}} />
                     </span>
                     <span className={styles.icon_container}>
                       {answersPercentage[index] && answersPercentage[index].percentWrong}%
-                      <FaTimesCircle size={22} style={{ color: '#ff0000' }} />
+                      <FaTimesCircle size={22} style={{ color: '#f44336' }} />
                     </span>
                   </div>
                 </td>

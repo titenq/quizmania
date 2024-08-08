@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Navigate } from 'react-router-dom';
 
-import { IProtectedRouteProps } from '../interfaces/IProtectedRouteProps';
+import IProtectedRouteProps from '../interfaces/IProtectedRouteProps';
 
 const ProtectedRoute: FC<IProtectedRouteProps> = ({ children }) => {
   const googleToken = localStorage.getItem('google_token');

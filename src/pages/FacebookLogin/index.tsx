@@ -2,7 +2,7 @@ import { useContext, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import styles from './FacebookLogin.module.css';
-import { AuthContext } from '../../context/AuthContext';
+import AuthContext from '../../context/AuthContext';
 import getUser from '../../api/getUser';
 import Host from '../../enums/Host';
 import TokenName from '../../enums/TokenName';

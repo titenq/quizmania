@@ -1,17 +1,21 @@
+/* eslint-disable react-refresh/only-export-components */
+import { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
 import Layout from './components/Layout';
 import Home from './pages/Home';
-import Login from './pages/Login';
-import Admin from './pages/Admin';
-import GoogleLogin from './pages/GoogleLogin';
-import FacebookLogin from './pages/FacebookLogin';
-import XLogin from './pages/XLogin';
-import GithubLogin from './pages/GithubLogin';
-import Quiz from './pages/Quiz';
-import NotFound from './pages/NotFound';
 import ProtectedRoute from './protectedRoutes/ProtectedRoute';
-import QuizQuestion from './pages/QuizQuestion';
+
+const Login = lazy(() => import('./pages/Login'));
+const Admin = lazy(() => import('./pages/Admin'));
+const GoogleLogin = lazy(() => import('./pages/GoogleLogin'));
+const FacebookLogin = lazy(() => import('./pages/FacebookLogin'));
+const XLogin = lazy(() => import('./pages/XLogin'));
+const GithubLogin = lazy(() => import('./pages/GithubLogin'));
+const Quiz = lazy(() => import('./pages/Quiz'));
+const QuizQuestion = lazy(() => import('./pages/QuizQuestion'));
+const QuizAnswers = lazy(() => import('./pages/QuizAnswers'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
 const router = createBrowserRouter([
   {
@@ -23,49 +27,89 @@ const router = createBrowserRouter([
       },
       {
         path: '/login',
-        element: <Login />
+        element: (
+          <Suspense fallback={<div>Carregando...</div>}>
+            <Login />
+          </Suspense>
+        ) 
       },
       {
         path: '/auth/google/callback',
-        element: <GoogleLogin />
+        element: (
+          <Suspense fallback={<div>Carregando...</div>}>
+            <GoogleLogin />
+          </Suspense>
+        ) 
       },
       {
         path: '/auth/facebook/callback',
-        element: <FacebookLogin />
+        element: (
+          <Suspense fallback={<div>Carregando...</div>}>
+            <FacebookLogin />
+          </Suspense>
+        ) 
       },
       {
         path: '/auth/x/callback',
-        element: <XLogin />
+        element: (
+          <Suspense fallback={<div>Carregando...</div>}>
+            <XLogin />
+          </Suspense>
+        ) 
       },
       {
         path: '/auth/github/callback',
-        element: <GithubLogin />
+        element: (
+          <Suspense fallback={<div>Carregando...</div>}>
+            <GithubLogin />
+          </Suspense>
+        )
       },
       {
         path: '/admin',
         element: (
-          <ProtectedRoute>
-            <Admin />
-          </ProtectedRoute>
+          <Suspense fallback={<div>Carregando...</div>}>
+            <ProtectedRoute>
+              <Admin />
+            </ProtectedRoute>
+          </Suspense>
         )
       },
       {
         path: '/quiz',
         element: (
-          <ProtectedRoute>
-            <Quiz />
-          </ProtectedRoute>
+          <Suspense fallback={<div>Carregando...</div>}>
+            <ProtectedRoute>
+              <Quiz />
+            </ProtectedRoute>
+          </Suspense>
         )
       },
       {
         path: '/quiz/:quizId',
         element: (
-          <QuizQuestion />
+          <Suspense fallback={<div>Carregando...</div>}>
+            <QuizQuestion />
+          </Suspense>
+        )
+      },
+      {
+        path: '/quiz/:quizId/answers',
+        element: (
+          <Suspense fallback={<div>Carregando...</div>}>
+            <ProtectedRoute>
+              <QuizAnswers />
+            </ProtectedRoute>
+          </Suspense>
         )
       },
       {
         path: '*',
-        element: <NotFound />
+        element: (
+          <Suspense fallback={<div>Carregando...</div>}>
+            <NotFound />
+          </Suspense>
+        )
       }
     ]
   }

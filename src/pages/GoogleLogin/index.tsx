@@ -2,7 +2,7 @@ import { useContext, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import styles from './GoogleLogin.module.css';
-import { AuthContext } from '../../context/AuthContext';
+import AuthContext from '../../context/AuthContext';
 import TokenName from '../../enums/TokenName';
 import Host from '../../enums/Host';
 import getUser from '../../api/getUser';

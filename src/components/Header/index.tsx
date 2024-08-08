@@ -6,7 +6,7 @@ import Lottie from 'lottie-react';
 import styles from './Header.module.css';
 import lottieQuiz from '../../assets/lotties/quiz.json';
 import avatar from '../../assets/avatar.png';
-import { AuthContext } from '../../context/AuthContext';
+import AuthContext from '../../context/AuthContext';
 
 const Header = () => {
   const { isLoggedIn, user, logout } = useContext(AuthContext);

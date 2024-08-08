@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaPlusCircle } from 'react-icons/fa';
 
 import styles from './Quiz.module.css';
-import { AuthContext } from '../../context/AuthContext';
+import AuthContext from '../../context/AuthContext';
 import { IQuiz, IQuestion } from '../../interfaces/IQuiz';
 import createQuiz from '../../api/quiz/createQuiz';
 import ModalError from '../../components/ModalError';
