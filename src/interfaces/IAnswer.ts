@@ -31,3 +31,9 @@ export interface IAnswersPercentage {
   percentRight: number;
   percentWrong: number;
 }
+
+export interface ICalculatePercentage {
+  rightAnswers: number;
+  wrongAnswers: number;
+  totalAnswers: number;
+}

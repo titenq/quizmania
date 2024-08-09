@@ -42,8 +42,10 @@ const Admin = () => {
     user && fetchAnswersPercentage(user._id, 1);
   }, [user]);
 
-  const handleAnswers = (quizId: string) => {
-    navigate(`/quiz/${quizId}/answers`);
+  const handleAnswers = (quizId: string, quizTitle: string) => {
+    navigate(`/quiz/${quizId}/answers`,
+      { state: { quizTitle } }
+    );
   };
 
   return (
@@ -85,7 +87,7 @@ const Admin = () => {
                   <div className={styles.percentage}>
                     <span
                       className={styles.icon_container}
-                      onClick={() => handleAnswers(quiz._id)}
+                      onClick={() => handleAnswers(quiz._id, quiz.quizTitle)}
                       style={{ cursor: 'pointer' }}
                     >
                       {answersPercentage[index] && answersPercentage[index].answersLength}

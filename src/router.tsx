@@ -15,6 +15,7 @@ const GithubLogin = lazy(() => import('./pages/GithubLogin'));
 const Quiz = lazy(() => import('./pages/Quiz'));
 const QuizQuestion = lazy(() => import('./pages/QuizQuestion'));
 const QuizAnswers = lazy(() => import('./pages/QuizAnswers'));
+const QuizAnswersResponse = lazy(() => import('./pages/QuizAnswersResponse'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 const router = createBrowserRouter([
@@ -99,6 +100,16 @@ const router = createBrowserRouter([
           <Suspense fallback={<div>Carregando...</div>}>
             <ProtectedRoute>
               <QuizAnswers />
+            </ProtectedRoute>
+          </Suspense>
+        )
+      },
+      {
+        path: '/quiz/:quizId/answers/response',
+        element: (
+          <Suspense fallback={<div>Carregando...</div>}>
+            <ProtectedRoute>
+              <QuizAnswersResponse />
             </ProtectedRoute>
           </Suspense>
         )
