@@ -51,3 +51,15 @@ export interface IQuizAnswers {
 export interface IQuizLatest extends Omit<IQuizModifiedResponse, 'questions'> {
   percentages: IAnswersPercentage;
 }
+
+export interface IQuizTable {
+  _id: string;
+  quizTitle: string;
+  percentages: IAnswersPercentage;
+  createdAt: Date;
+}
+
+export interface IQuizTableProps {
+  title: string;
+  quizzes: IQuizTable[];
+}

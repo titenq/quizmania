@@ -1,0 +1,53 @@
+.neumorphism_table {
+  width: 80%;
+  border-collapse: collapse;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 1), 0 10px 20px rgba(0, 0, 0, 0.4);
+  background: linear-gradient(to bottom, #171717, #242424);
+  color: #fff;
+  margin: 50px 0;
+  font-family: IBMPlexSans, sans-serif;
+}
+
+.neumorphism_table th,
+.neumorphism_table td {
+  padding: 15px;
+  text-align: left;
+  border: 1px solid #292929;
+}
+
+.neumorphism_table th {
+  text-align: center;
+  background: linear-gradient(to bottom, #292929, #000000);
+}
+
+.neumorphism_table td {
+  background: linear-gradient(to bottom, #171717, #242424);
+}
+
+.neumorphism_table tr:hover td {
+  background: linear-gradient(to bottom, #292929, #171717);
+}
+
+.neumorphism_table tr:last-child td {
+  border-bottom: none;
+}
+
+.percentage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.icon_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.link_icon {
+  color: #fff;
+}
