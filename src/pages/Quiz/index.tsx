@@ -63,9 +63,7 @@ const Quiz = () => {
       return false;
     }
 
-    for (let i = 0; i < questions.length; i++) {
-      const currentQuestion = questions[i];
-
+    const isValid = questions.every((currentQuestion, i) => {
       if (!currentQuestion.question) {
         setErrorMessage(`A pergunta ${i + 1} está em branco`);
 
@@ -78,7 +76,7 @@ const Quiz = () => {
         return false;
       }
 
-      if (currentQuestion.wrongAnswers.some((wrongAnswer, index) => {
+      const hasEmptyWrongAnswer = currentQuestion.wrongAnswers.some((wrongAnswer, index) => {
         if (!wrongAnswer) {
           setErrorMessage(`A resposta errada ${index + 1} da pergunta ${i + 1} está em branco`);
 
@@ -86,9 +84,31 @@ const Quiz = () => {
         }
 
         return false;
-      })) {
+      });
+
+      if (hasEmptyWrongAnswer) {
         return false;
       }
+
+      if (currentQuestion.wrongAnswers.includes(currentQuestion.rightAnswer)) {
+        setErrorMessage(`A resposta correta e uma das respostas erradas na pergunta ${i + 1} são iguais`);
+
+        return false;
+      }
+
+      const wrongAnswersSet = new Set(currentQuestion.wrongAnswers);
+
+      if (wrongAnswersSet.size !== currentQuestion.wrongAnswers.length) {
+        setErrorMessage(`Existem respostas erradas duplicadas na pergunta ${i + 1}`);
+
+        return false;
+      }
+
+      return true;
+    });
+
+    if (!isValid) {
+      return false;
     }
 
     setErrorMessage(null);
