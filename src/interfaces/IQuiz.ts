@@ -1,3 +1,5 @@
+import { IAnswersPercentage } from "./IAnswer";
+
 export interface IQuestion {
   question: string;
   rightAnswer: string;
@@ -44,4 +46,8 @@ export interface IQuizAnswers {
   question: string;
   answer: string;
   isRight: boolean;
+}
+
+export interface IQuizLatest extends Omit<IQuizModifiedResponse, 'questions'> {
+  percentages: IAnswersPercentage;
 }
