@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import styles from './QuizQuestion.module.css';
 import { IQuizAnswers, IQuizModifiedResponse } from '../../interfaces/IQuiz';
@@ -23,6 +23,7 @@ import createAnswer from '../../api/answer/createAnswer';
 const answerImages = [a, b, c, d, e];
 
 const QuizQuestion = () => {
+  const navigate = useNavigate();
   const { quizId } = useParams();
   const [quiz, setQuiz] = useState<IQuizModifiedResponse | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -32,7 +33,6 @@ const QuizQuestion = () => {
   const [answered, setAnswered] = useState(false);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [rightAnswer, setRightAnswer] = useState<string | null>(null);
-  const [resultMessage, setResultMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const getQuiz = async (quizId: string) => {
@@ -139,7 +139,14 @@ const QuizQuestion = () => {
 
       const message = `Você acertou ${rightAnswers} de ${totalAnswers} pergunta${totalAnswers > 1 ? 's' : ''}${getMessage(percentage)}`;
 
-      setResultMessage(message);
+      navigate(`/quiz/${quizId}/answers/response`,
+        {
+          state: {
+            answers: postCreateAnswer.answers,
+            message
+          }
+        }
+      );
     }
   };
 
@@ -227,12 +234,6 @@ const QuizQuestion = () => {
             )}
           </div>
         </form>
-      )}
-
-      {resultMessage && (
-        <div className={styles.result_message}>
-          {resultMessage}
-        </div>
       )}
 
       <ModalError errorMessage={errorMessage} shouldNavigate={true} setErrorMessage={setErrorMessage} />

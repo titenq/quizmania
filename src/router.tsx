@@ -108,9 +108,7 @@ const router = createBrowserRouter([
         path: '/quiz/:quizId/answers/response',
         element: (
           <Suspense fallback={<div>Carregando...</div>}>
-            <ProtectedRoute>
-              <QuizAnswersResponse />
-            </ProtectedRoute>
+            <QuizAnswersResponse />
           </Suspense>
         )
       },

@@ -18,6 +18,7 @@ const QuizAnswersResponse = () => {
   const { quizId } = useParams();
   const location = useLocation();
   const answers: IAnswer[] = location.state?.answers;
+  const message: string = location.state?.message;
   const [questions, setQuestions] = useState<IQuizModifiedResponse>();
 
   useEffect(() => {
@@ -37,6 +38,12 @@ const QuizAnswersResponse = () => {
           <h2 className={styles.quiz_title}>
             {questions && questions.quizTitle}
           </h2>
+
+          {message && (
+            <div className={styles.result_message}>
+              {message}
+            </div>
+          )}
 
           <div className={styles.quiz_container}>
             {answers && answers.map((item, index) => (
