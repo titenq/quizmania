@@ -28,8 +28,6 @@ const Admin = () => {
     const getAllQuiz = async (userId: string, page: number) => {
       const response: IQuizzes = await getAllQuizByUserId(userId, page);
 
-      console.log(response)
-
       setQuizzes(response.quizzes);
       setCurrentPage(response.currentPage);
       setTotalPages(response.totalPages);
