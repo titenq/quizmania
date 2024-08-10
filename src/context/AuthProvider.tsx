@@ -6,7 +6,7 @@ import { backendBaseUrl, frontendBaseUrl } from '../helpers/baseUrl.ts';
 import Host from '../enums/Host.ts';
 import TokenName from '../enums/TokenName.ts';
 import getUser from '../api/user/getUser.ts';
-import AuthContext from './AuthContext'; // Importa o AuthContext do novo arquivo
+import AuthContext from './AuthContext';
 
 const googleToken = localStorage.getItem('google_token');
 const facebookToken = localStorage.getItem('facebook_token');
