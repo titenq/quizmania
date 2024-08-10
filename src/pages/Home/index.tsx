@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
+import { FaQuestion } from 'react-icons/fa';
 import Lottie from 'lottie-react';
 
 import lottieQuestion from '../../assets/lotties/question.json';
@@ -10,8 +12,10 @@ import getLatestQuizzes from '../../api/quiz/getLatestQuizzes';
 import { IQuizLatest } from '../../interfaces/IQuiz';
 import getTopQuizzes from '../../api/quiz/getTopQuizzes';
 import TableQuizzes from '../../components/TableQuizzes';
+import Button from '../../components/Button';
 
 const Home = () => {
+  const navigate = useNavigate();
   const [topQuizzes, setTopQuizzes] = useState<IQuizLatest[] | null>(null);
   const [latestQuizzes, setLatestQuizzes] = useState<IQuizLatest[] | null>(null);
 
@@ -31,6 +35,10 @@ const Home = () => {
     fetchTopQuizzes();
     fetchLatestQuizzes();
   }, []);
+
+  const handleGetAllQuizzes = () => {
+    navigate('/quizzes');
+  };
 
   return (
     <div className={styles.container}>
@@ -76,6 +84,13 @@ const Home = () => {
       <TableQuizzes
         title='Últimos Quizzes'
         quizzes={latestQuizzes || []}
+      />
+
+      <Button
+        type="button"
+        title="Todos os Quizzes"
+        onClick={handleGetAllQuizzes}
+        icon={<FaQuestion size={22} />}
       />
     </div>
   );

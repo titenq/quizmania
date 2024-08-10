@@ -1,10 +1,10 @@
 import { backendBaseUrl } from '../../helpers/baseUrl';
 
-const getLatestQuizzes = async (limit: number = 10) => {
+const getAllQuiz = async (page: number = 1) => {
   try {
     const apiKey = import.meta.env.VITE_API_KEY;
 
-    const response = await fetch(`${backendBaseUrl}/quizzes/latest?limit=${limit}`, {
+    const response = await fetch(`${backendBaseUrl}/quizzes?page=${page}`, {
       method: 'GET',
       headers: {
         'api_key': apiKey,
@@ -26,4 +26,4 @@ const getLatestQuizzes = async (limit: number = 10) => {
   }
 };
 
-export default getLatestQuizzes;
+export default getAllQuiz;

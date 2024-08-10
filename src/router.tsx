@@ -16,6 +16,7 @@ const Quiz = lazy(() => import('./pages/Quiz'));
 const QuizQuestion = lazy(() => import('./pages/QuizQuestion'));
 const QuizAnswers = lazy(() => import('./pages/QuizAnswers'));
 const QuizAnswersResponse = lazy(() => import('./pages/QuizAnswersResponse'));
+const Quizzes = lazy(() => import('./pages/Quizzes'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 const router = createBrowserRouter([
@@ -109,6 +110,14 @@ const router = createBrowserRouter([
         element: (
           <Suspense fallback={<div>Carregando...</div>}>
             <QuizAnswersResponse />
+          </Suspense>
+        )
+      },
+      {
+        path: '/quizzes',
+        element: (
+          <Suspense fallback={<div>Carregando...</div>}>
+            <Quizzes />
           </Suspense>
         )
       },
