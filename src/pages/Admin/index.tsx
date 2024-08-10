@@ -43,8 +43,8 @@ const Admin = () => {
       response && setAnswersPercentage(response);
     };
 
-    user && fetchAnswersPercentage(user._id, 1);
-  }, [user]);
+    user && fetchAnswersPercentage(user._id, currentPage);
+  }, [currentPage, user]);
 
   const handleAnswers = (quizId: string, quizTitle: string) => {
     navigate(`/quiz/${quizId}/answers`,
