@@ -4,25 +4,25 @@
   justify-content: center;
   padding: 0;
   margin: 0;
-  width: 250px;
-  height: 40px;
+  width: 15.625rem;
+  height: 2.5rem;
   border: none;
-  border-radius: 4px;
-  font-size: 16px;
+  border-radius: 0.25rem;
+  font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
-  border: 1px solid transparent;
+  border: 0.0625rem solid transparent;
   transition: all 0.5s ease-in-out;
 }
 
 .login_button:hover {
   background-color: var(--bg-primary);
   color: var(--color-primary);
-  border: 1px solid var(--color-primary);
+  border: 0.0625rem solid var(--color-primary);
 }
 
 .login_title {
-  margin-left: 5px;
+  margin-left: 0.3125rem;
 }
 
 .google_button {
@@ -46,21 +46,21 @@
 }
 
 .lottie_google {
-  width: 35px;
-  padding: 4px 0 0 25px;
+  width: 2.1875rem;
+  padding: 0.25rem 0 0 1.5625rem;
 }
 
 .lottie_facebook {
-  width: 50px;
-  padding: 4px 0 0 10px;
+  width: 3.125rem;
+  padding: 0.25rem 0 0 0.625rem;
 }
 
 .lottie_github {
-  width: 60px;
-  padding: 4px 0 0 5px;
+  width: 3.75rem;
+  padding: 0.25rem 0 0 0.3125rem;
 }
 
 .lottie_x {
-  width: 35px;
-  padding: 4px 0 0 20px;
+  width: 2.1875rem;
+  padding: 0.25rem 0 0 1.25rem;
 }

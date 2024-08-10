@@ -23,16 +23,16 @@ const Header = () => {
   }, []);
 
   return (
-    <div className={`${styles.container} ${shouldAnimate ? styles.animationToHeader : styles.container}`}>
-      <div className={styles.logoContainer}>
+    <div className={`${styles.container_header} ${shouldAnimate ? styles.animation_to_header : styles.container_header}`}>
+      <div className={styles.logo_container}>
         <Lottie
           animationData={lottieQuiz}
           loop={false}
-          className={`${styles.lottieQuiz} ${shouldAnimate ? styles.animationToLogo : styles.lottieQuiz}`}
+          className={`${styles.lottieQuiz} ${shouldAnimate ? styles.animation_to_logo : styles.lottie_quiz}`}
         />
         <a
           href='/'
-          className={`${styles.link} ${shouldAnimate ? styles.animationToTitle : styles.link}`}>
+          className={`${styles.link} ${shouldAnimate ? styles.animation_to_title : styles.link}`}>
           QuizMania
         </a>
       </div>
@@ -40,23 +40,23 @@ const Header = () => {
       {!isLoggedIn ? (
         <Link
           to='/login'
-          className={`${styles.link} ${shouldAnimate ? styles.animationToTitle : styles.link}`}
+          className={`${styles.link} ${shouldAnimate ? styles.animation_to_title : styles.link}`}
         >
           Login
         </Link>
       ) : (
         <div
-          className={`${styles.avatarContainer} ${shouldAnimate ? styles.animationToTitle : styles.avatarContainer}`}
+          className={`${styles.avatar_container} ${shouldAnimate ? styles.animation_to_title : styles.avatar_container}`}
         >
           <Link
             to='/admin'
-            className={`${styles.adminLink} ${shouldAnimate ? styles.animationToTitle : styles.adminLink}`}
+            className={`${styles.admin_link} ${shouldAnimate ? styles.animation_to_title : styles.admin_link}`}
           >
             Admin
           </Link>
           <button
             onClick={() => logout()}
-            className={styles.buttonLogout}
+            className={styles.button_logout}
           >
             Logout
           </button>

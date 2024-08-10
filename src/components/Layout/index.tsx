@@ -5,7 +5,7 @@ import Header from '../Header';
 
 const Layout = () => {
   return (
-    <div className={styles.container}>
+    <div className={styles.container_layout}>
       <Header />
       <Outlet />
     </div>

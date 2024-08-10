@@ -5,26 +5,26 @@
   flex-direction: column;
   width: 100%;
   margin: 0;
-  padding: 0 0 40px 0;
+  padding: 0 0 2.5rem 0;
   font-family: IBMPlexSans, sans-serif;
 }
 
 .neumorphism_table {
   width: 80%;
   border-collapse: collapse;
-  border-radius: 12px;
+  border-radius: 0.75rem;
   overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 1), 0 10px 20px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 1), 0 0.625rem 1.25rem rgba(0, 0, 0, 0.4);
   background: linear-gradient(to bottom, #171717, #242424);
   color: #fff;
-  margin-top: 50px;
+  margin-top: 3.125rem;
 }
 
 .neumorphism_table th,
 .neumorphism_table td {
-  padding: 15px;
+  padding: 0.9375rem;
   text-align: left;
-  border: 1px solid #292929;
+  border: 0.0625rem solid #292929;
 }
 
 .neumorphism_table th {

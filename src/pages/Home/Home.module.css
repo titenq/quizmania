@@ -12,6 +12,7 @@
   display: flex;
   align-items: center;
   flex-direction: row;
+  padding: 0 1.25rem;
 }
 
 .titleContainer {
@@ -22,9 +23,10 @@
 }
 
 .lottieQuestion {
-  width: 300px;
+  width: 18.75rem;
+  z-index: -1;
 }
 
 .lottieTwoQuestions {
-  width: 300px;
+  width: 18.75rem;
 }
