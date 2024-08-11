@@ -76,16 +76,20 @@ const Home = () => {
         <Lottie animationData={lottieTwoQuestions} className={styles.lottieTwoQuestions} />
       </div>
 
-      <TableQuizzes
-        title='Top Quizzes'
-        quizzes={topQuizzes || []}
-      />
+      {topQuizzes && topQuizzes?.length > 0 && (
+        <TableQuizzes
+          title='Top Quizzes'
+          quizzes={topQuizzes || []}
+        />
+      )}
 
-      <TableQuizzes
-        title='Últimos Quizzes'
-        quizzes={latestQuizzes || []}
-      />
-
+      {latestQuizzes && latestQuizzes?.length > 0 && (
+        <TableQuizzes
+          title='Top Quizzes'
+          quizzes={latestQuizzes || []}
+        />
+      )}
+      
       <Button
         type="button"
         title="Todos os Quizzes"
