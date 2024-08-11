@@ -60,7 +60,9 @@ const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
           credentials: 'include'
         });
 
-        if (response.ok) {
+        const data = await response.json();
+
+        if (data.message === 'Sucesso ao fazer logout') {
           window.location.href = frontendBaseUrl;
         } else {
           console.error('Erro no logout');
