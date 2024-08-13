@@ -85,7 +85,7 @@ const Home = () => {
 
       {latestQuizzes && latestQuizzes?.length > 0 && (
         <TableQuizzes
-          title='Top Quizzes'
+          title='Últimos Quizzes'
           quizzes={latestQuizzes || []}
         />
       )}
